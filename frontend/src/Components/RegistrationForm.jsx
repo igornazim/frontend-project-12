@@ -19,8 +19,10 @@ const RegistrationForm = () => {
     password: Yup.string()
       .min(6, "Минимум 6 символов")
       .required("Обязательное поле"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Пароли должны совпадать"
+    ),
   });
 
   const formik = useFormik({
@@ -67,7 +69,9 @@ const RegistrationForm = () => {
                       placeholder="Имя пользователя"
                       onChange={formik.handleChange}
                       value={formik.values.username}
-                      isInvalid={!!formik.errors.username}
+                      isInvalid={
+                        !!formik.errors.username && formik.touched.password
+                      }
                     />
                     <Form.Control.Feedback
                       placement="right"
@@ -120,7 +124,10 @@ const RegistrationForm = () => {
                       placeholder="Подтвердите пароль"
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
-                      isInvalid={!!formik.errors.confirmPassword}
+                      isInvalid={
+                        !!formik.errors.confirmPassword &&
+                        formik.touched.password
+                      }
                     />
                     <Form.Control.Feedback
                       placement="right"

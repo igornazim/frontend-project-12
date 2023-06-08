@@ -1,5 +1,25 @@
-import { Container, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container, Navbar, Button } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
+import useAuth from "./Hooks/Index.jsx";
+
+const AuthButton = () => {
+  const auth = useAuth();
+  const location = useLocation();
+  return auth.currentUser ? (
+    <Button
+      onClick={auth.logOut}
+      as={Link}
+      to="/login"
+      state={{ from: location }}
+    >
+      Выйти
+    </Button>
+  ) : (
+    <Button as={Link} to="/login" state={{ from: location }}>
+      Войти
+    </Button>
+  );
+};
 
 const Navigation = () => {
   return (
@@ -10,6 +30,7 @@ const Navigation = () => {
             Hexlet chat
           </Link>
         </Navbar.Brand>
+        <AuthButton />
       </Container>
     </Navbar>
   );

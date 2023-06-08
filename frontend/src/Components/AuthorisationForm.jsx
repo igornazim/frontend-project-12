@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState } from "react";
 import {
   Button,
   Form,
@@ -6,13 +6,13 @@ import {
   Container,
   Image,
   FloatingLabel,
-  Row
+  Row,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from '../Hooks/Index.jsx';
-import routes from '../Hooks/routes.js';
+import useAuth from "../Hooks/Index.jsx";
+import routes from "../Hooks/routes.js";
 import { useFormik } from "formik";
-import axios from 'axios';
+import axios from "axios";
 
 const AuthorisationForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
@@ -28,9 +28,13 @@ const AuthorisationForm = () => {
       setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
-        navigate('/');
+        const user = {
+          username: formik.values.username,
+          password: formik.values.password,
+          token: res.data,
+        };
+        auth.logIn(user);
+        navigate("/");
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -111,7 +115,7 @@ const AuthorisationForm = () => {
                   variant="outline-primary"
                   type="submit"
                 >
-                  Зарегистрироваться
+                  Войти
                 </Button>
               </Form>
             </Card.Body>
