@@ -40,7 +40,7 @@ const AuthProvider = ({ children }) => {
       dispatch(setChannels(data.channels));
     };
     fetchContent();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <AuthContext.Provider value={{ currentUser, logIn, logOut }}>
