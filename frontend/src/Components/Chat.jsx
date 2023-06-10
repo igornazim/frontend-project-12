@@ -1,9 +1,53 @@
-import { Container, Row, Col, Image, Form } from "react-bootstrap";
-import React from 'react';
+import { Container, Row, Col, Image, Form} from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import routes from '../routes.js';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setChannels } from '../slices/channelsSlice.js';
+import { useFormik } from "formik";
+import useAuth from "../hooks/Index.jsx";
+import { io } from "socket.io-client";
+const socket = io();
+
+const getAuthHeader = () => {
+  const userId = JSON.parse(localStorage.getItem('userId'));
+  if (userId && userId.token) {
+    return { Authorization: `Bearer ${userId.token}` };
+  }
+
+  return {};
+};
 
 const Chat = () => {
+  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer.channels);
+  const { currentUser } = useAuth();
+
+  const formik = useFormik({
+    initialValues: {
+      text: "",
+    },
+    onSubmit: (values) => {
+      socket.emit('newMessage', { body: JSON.stringify(values.text), channelId: 1, username: 'admin' }, (response) => {
+        console.log(response.status);
+      });
+      socket.on('newMessage', (payload) => {
+        setMessages([...messages, payload]);
+      });
+      values.text = '';
+    },
+  });
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
+      dispatch(setChannels(data.channels));
+    };
+    fetchContent();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const renderChannels = () => {
     if (channels.length === 0) {
       return null;
@@ -17,6 +61,19 @@ const Chat = () => {
           </button>
         </li>
       ))
+    )
+  }
+
+  const renderMessages = () => {
+    return (
+        messages.map(({ body, id}) => (
+          <div key={id} className="text-break mb-2">
+            <b>
+              {currentUser.username}:
+            </b>
+            {` ${JSON.parse(body)}`}
+          </div>
+        ))
     )
   }
 
@@ -54,16 +111,20 @@ const Chat = () => {
             <div
               id="messages-box"
               className="chat-messages overflow-auto px-5 "
-            ></div>
+              
+            >
+              {renderMessages()}
+            </div>
             <div className="mt-auto px-5 py-3">
-              <Form noValidate="" className="py-1 border rounded-2">
+              <Form noValidate="" onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
                 <div className="input-group has-validation">
                   <input
-                    name="body"
+                    name="text"
                     aria-label="Новое сообщение"
                     placeholder="Введите сообщение..."
                     className="border-0 p-0 ps-2 form-control"
-                    value=""
+                    value={formik.values.text}
+                    onChange={formik.handleChange}
                   />
                   <button
                     type="submit"

@@ -5,6 +5,7 @@ import {
   Container,
   Image,
   FloatingLabel,
+  Row,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
@@ -37,7 +38,7 @@ const RegistrationForm = () => {
 
   return (
     <Container className="container-fluid h-100">
-      <Container className="row justify-content-center align-content-center h-100">
+      <Row className="justify-content-center align-content-center h-100">
         <Container className="col-12 col-md-8 col-xxl-6">
           <Card className="shadow-sm">
             <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
@@ -152,7 +153,7 @@ const RegistrationForm = () => {
             </Card.Footer>
           </Card>
         </Container>
-      </Container>
+      </Row>
     </Container>
   );
 };
