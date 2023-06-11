@@ -1,10 +1,13 @@
+import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import init from './init.jsx';
+import App from "./App";
+import { Provider } from 'react-redux';
+import store from './slices/index.js';
 
-const app = () => {
-  const root = ReactDOM.createRoot(document.getElementById('chat'));
-  root.render(init());
-};
-
-app();
+const root = ReactDOM.createRoot(document.getElementById("chat"));
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
