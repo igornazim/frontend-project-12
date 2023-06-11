@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RegistrationForm from "./components/RegistrationForm.jsx";
-import AuthorisationForm from "./components/AuthorisationForm.jsx";
-import Chat from "./components/Chat.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
+import RegistrationForm from "./Components/RegistrationForm.jsx";
+import AuthorisationForm from "./Components/AuthorisationForm.jsx";
+import Chat from "./Components/Chat.jsx";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
 import Navigation from "./Navigation.jsx";
 import Page404 from "./Page404.jsx";
 import AuthContext from "./contexts/Index.jsx";
