@@ -6,7 +6,7 @@ import Chat from "./Components/Chat.jsx";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
 import Navigation from "./Navigation.jsx";
 import Page404 from "./Page404.jsx";
-import AuthContext from "./contexts/Index.jsx";
+import AuthContext from "./Contexts/Index.jsx";
 
 const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
