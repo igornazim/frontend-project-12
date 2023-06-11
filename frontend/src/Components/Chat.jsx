@@ -24,7 +24,7 @@ const Chat = () => {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer.channels);
   const { currentUser } = useAuth();
-  
+  console.log(currentUser)
   const formik = useFormik({
     initialValues: {
       text: "",
