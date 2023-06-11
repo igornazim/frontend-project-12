@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
 import { useFormik } from "formik";
-import useAuth from "../Hooks/Index.jsx";
+import useAuth from "../hooks/Index.jsx";
 import { io } from "socket.io-client";
 const socket = io();
 

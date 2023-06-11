@@ -1,6 +1,6 @@
 import { Container, Navbar, Button } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import useAuth from "./Hooks/Index.jsx";
+import useAuth from "./hooks/Index.jsx";
 
 const AuthButton = () => {
   const auth = useAuth();

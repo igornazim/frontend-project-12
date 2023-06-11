@@ -9,7 +9,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../Hooks/Index.jsx";
+import useAuth from "../hooks/Index.jsx";
 import routes from "../routes.js";
 import { useFormik } from "formik";
 import axios from "axios";
