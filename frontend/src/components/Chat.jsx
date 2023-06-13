@@ -7,8 +7,7 @@ import { useDispatch } from 'react-redux';
 import { setChannels } from '../slices/channelsSlice.js';
 import { useFormik } from "formik";
 import useAuth from "../hooks/Index.jsx";
-import { io } from "socket.io-client";
-const socket = io();
+import useSocket from "../hooks/useSocket.jsx";
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -24,7 +23,8 @@ const Chat = () => {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer.channels);
   const { currentUser } = useAuth();
-  console.log(currentUser)
+  const { socket } = useSocket();
+
   const formik = useFormik({
     initialValues: {
       text: "",
