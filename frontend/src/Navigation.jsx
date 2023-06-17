@@ -5,6 +5,7 @@ import useAuth from "./hooks/Index.jsx";
 const AuthButton = () => {
   const auth = useAuth();
   const location = useLocation();
+
   return auth.currentUser ? (
     <Button
       onClick={auth.logOut}

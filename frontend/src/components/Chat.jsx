@@ -1,4 +1,4 @@
-import { Container, Row, Col, Image, Form} from "react-bootstrap";
+import { Container, Row, Col, Image, Form, Nav, ToggleButton, ButtonGroup, Button, Dropdown} from "react-bootstrap";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import routes from '../routes.js';
@@ -8,6 +8,7 @@ import { setChannels } from '../slices/channelsSlice.js';
 import { useFormik } from "formik";
 import useAuth from "../hooks/Index.jsx";
 import useSocket from "../hooks/useSocket.jsx";
+import getModal from "../getModal.js";
 
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
@@ -18,7 +19,22 @@ const getAuthHeader = () => {
   return {};
 };
 
+const renderModal = ({ modalInfo, hideModal }) => {
+  if (!modalInfo.type) {
+    return null;
+  }
+  const Component = getModal(modalInfo.type);
+  return (
+    <Component modalInfo={modalInfo} hideModal={hideModal} />
+  );
+};
+
 const Chat = () => {
+  const [modalInfo, setModalInfo] = useState({ task: null, type: null });
+  const showModal = (type, item = null) => setModalInfo({ type, item });
+  const hideModal = () => setModalInfo({ type: null, item: null });
+
+  const [currentId, setId] = useState(1);
   const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channelsReducer.channels);
@@ -53,14 +69,44 @@ const Chat = () => {
       return null;
     }
     return (
-      channels.map(({ id, name }) => (
-        <li key={id} className="nav-item w-100">
-          <button type="button" className="w-100 rounded-0 text-start btn">
-            <span className="me-1">#</span>
-            {name}
-          </button>
-        </li>
-      ))
+      channels.map(({ id, name, removable }) => {
+        if (removable) {
+          return (
+            <Nav.Item key={id} className="w-100">
+              <Dropdown className="w-100" as={ButtonGroup}>
+                <Button
+                  variant={currentId === id ? 'secondary' : null}
+                  onClick={() => setId(id)}
+                  className="w-100 rounded-0 text-start text-truncate"
+                >
+                  {`# ${name}`}
+                </Button>
+                <Dropdown.Toggle
+                  split
+                  variant={currentId === id ? 'secondary' : null}
+                  id="dropdown-split-basic" />
+                <Dropdown.Menu>
+                  <Dropdown.Item href="#/action-1">Удалить</Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Переименовать</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav.Item>
+          )
+        }
+        return (
+          <Nav.Item key={id} className="w-100">
+            <ToggleButton
+              variant={currentId === id ? 'secondary' : null}
+              type="button"
+              className="w-100 rounded-0 text-start"
+              onClick={() => setId(id)}
+            >
+              <span className="me-1">#</span>
+              {name}
+            </ToggleButton>
+          </Nav.Item>
+        )
+      })
     )
   }
 
@@ -83,28 +129,30 @@ const Chat = () => {
         <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
           <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
             <b>Каналы</b>
-            <button
+            <Button
+              onClick={() => showModal('adding')}
               type="button"
+              variant="light"
               className="p-0 text-primary btn btn-group-vertical"
             >
               <Image
                 src={`${process.env.PUBLIC_URL}/plus.svg`}
               />
               <span className="visually-hidden">+</span>
-            </button>
+            </Button>
           </div>
-          <ul
+          <Nav
             id="channels-box"
-            className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
+            className="flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
           >
             {renderChannels()}
-          </ul>
+          </Nav>
         </Col>
         <Col className="p-0 h-100">
           <div className="d-flex flex-column h-100">
             <div className="bg-light mb-4 p-3 shadow-sm small">
               <p className="m-0">
-                <b># general</b>
+                <b>{`# ${channels.length !== 0 ? channels.find(({ id }) => id === currentId).name : 'general'}`}</b>
               </p>
               <span className="text-muted">0 сообщений</span>
             </div>
@@ -126,8 +174,9 @@ const Chat = () => {
                     value={formik.values.text}
                     onChange={formik.handleChange}
                   />
-                  <button
+                  <Button
                     type="submit"
+                    variant="light"
                     disabled=""
                     className="btn btn-group-vertical"
                   >
@@ -135,13 +184,14 @@ const Chat = () => {
                       src={`${process.env.PUBLIC_URL}/send.svg`}
                     />
                     <span className="visually-hidden">Отправить</span>
-                  </button>
+                  </Button>
                 </div>
               </Form>
             </div>
           </div>
         </Col>
       </Row>
+      {renderModal({ modalInfo, hideModal })}
     </Container>
   );
 };
