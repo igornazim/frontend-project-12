@@ -1,10 +1,11 @@
 import { Container, Row, Col, Image, Form, Nav, ToggleButton, ButtonGroup, Button, Dropdown} from "react-bootstrap";
 import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
 import axios from 'axios';
 import routes from '../routes.js';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setChannels } from '../slices/channelsSlice.js';
+import { useSelector, useDispatch } from 'react-redux';
+import { setChannels, channelsSelector } from '../slices/channelsSlice.js';
+import { addMessage, messagesSelector } from '../slices/messagesSlice.js';
 import { useFormik } from "formik";
 import useAuth from "../hooks/Index.jsx";
 import useSocket from "../hooks/useSocket.jsx";
@@ -19,25 +20,27 @@ const getAuthHeader = () => {
   return {};
 };
 
-const renderModal = ({ modalInfo, hideModal }) => {
+const renderModal = ({ modalInfo, hideModal, setId }) => {
   if (!modalInfo.type) {
     return null;
   }
   const Component = getModal(modalInfo.type);
   return (
-    <Component modalInfo={modalInfo} hideModal={hideModal} />
+    <Component modalInfo={modalInfo} hideModal={hideModal} setId={setId} />
   );
 };
 
 const Chat = () => {
-  const [modalInfo, setModalInfo] = useState({ task: null, type: null });
-  const showModal = (type, item = null) => setModalInfo({ type, item });
-  const hideModal = () => setModalInfo({ type: null, item: null });
+  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
+  const showModal = (type, channel = null) => setModalInfo({ type, channel });
+  const hideModal = () => setModalInfo({ type: null, channel: null });
 
   const [currentId, setId] = useState(1);
-  const [messages, setMessages] = useState([]);
   const dispatch = useDispatch();
-  const channels = useSelector((state) => state.channelsReducer.channels);
+
+  const channels = useSelector(channelsSelector.selectAll);
+  const messages = useSelector(messagesSelector.selectAll);
+  
   const { currentUser } = useAuth();
   const { socket } = useSocket();
 
@@ -50,7 +53,7 @@ const Chat = () => {
         console.log(response.status);
       });
       socket.on('newMessage', (payload) => {
-        setMessages([...messages, payload]);
+        dispatch(addMessage(payload));
       });
       values.text = '';
     },
@@ -69,40 +72,40 @@ const Chat = () => {
       return null;
     }
     return (
-      channels.map(({ id, name, removable }) => {
-        if (removable) {
+      channels.map((channel) => {
+        if (channel.removable) {
           return (
-            <Nav.Item key={id} className="w-100">
+            <Nav.Item key={_.uniqueId()} className="w-100">
               <Dropdown className="w-100" as={ButtonGroup}>
                 <Button
-                  variant={currentId === id ? 'secondary' : null}
-                  onClick={() => setId(id)}
+                  variant={currentId === channel.id ? 'secondary' : null}
+                  onClick={() => setId(channel.id)}
                   className="w-100 rounded-0 text-start text-truncate"
                 >
-                  {`# ${name}`}
+                  {`# ${channel.name}`}
                 </Button>
                 <Dropdown.Toggle
                   split
-                  variant={currentId === id ? 'secondary' : null}
+                  variant={currentId === channel.id ? 'secondary' : null}
                   id="dropdown-split-basic" />
                 <Dropdown.Menu>
-                  <Dropdown.Item href="#/action-1">Удалить</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('removing', channel)} href="#/action-1">Удалить</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('renaiming', channel)} href="#/action-2">Переименовать</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>
           )
         }
         return (
-          <Nav.Item key={id} className="w-100">
+          <Nav.Item key={_.uniqueId()} className="w-100">
             <ToggleButton
-              variant={currentId === id ? 'secondary' : null}
+              variant={currentId === channel.id ? 'secondary' : null}
               type="button"
               className="w-100 rounded-0 text-start"
-              onClick={() => setId(id)}
+              onClick={() => setId(channel.id)}
             >
               <span className="me-1">#</span>
-              {name}
+              {channel.name}
             </ToggleButton>
           </Nav.Item>
         )
@@ -152,7 +155,7 @@ const Chat = () => {
           <div className="d-flex flex-column h-100">
             <div className="bg-light mb-4 p-3 shadow-sm small">
               <p className="m-0">
-                <b>{`# ${channels.length !== 0 ? channels.find(({ id }) => id === currentId).name : 'general'}`}</b>
+                <b>{`# ${channels.length >= 2 ? channels.find(({ id }) => id === currentId).name : 'general'}`}</b>
               </p>
               <span className="text-muted">0 сообщений</span>
             </div>
@@ -191,7 +194,7 @@ const Chat = () => {
           </div>
         </Col>
       </Row>
-      {renderModal({ modalInfo, hideModal })}
+      {renderModal({ modalInfo, hideModal, setId })}
     </Container>
   );
 };

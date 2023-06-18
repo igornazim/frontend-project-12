@@ -1,24 +1,21 @@
 import React, { useEffect, useRef } from 'react';
-import _ from 'lodash';
 import { useFormik } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { addChannel, channelsSelector } from '../../slices/channelsSlice.js';
+import { updateChannel, channelsSelector } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import useAuth from "../../hooks/Index.jsx";
 import * as Yup from "yup";
 
-const Add = (props) => {
+const Rename = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
-  const { currentUser } = useAuth();
   const dispatch = useDispatch();
-  const { hideModal } = props;
+  const { hideModal, modalInfo } = props;
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.focus();
   });
 
-  const addingSchema = Yup.object().shape({
+  const renaimingSchema = Yup.object().shape({
     channelName: Yup.string()
       .min(3, "Минимум 3 символа")
       .required("Обязательное поле")
@@ -27,14 +24,14 @@ const Add = (props) => {
 
   const formik = useFormik({
     initialValues: {
-      channelName: '',
+      channelName: modalInfo.channel.name,
       channel: {},
     },
-    validationSchema: addingSchema,
+    validationSchema: renaimingSchema,
     onSubmit: () => {
       if (formik.values.channelName !== '') {
-        const newChannel = { id: _.uniqueId(), name: formik.values.channelName, removable: true, currentUser };
-        dispatch(addChannel(newChannel));
+        const updatedChannel = {...modalInfo.channel, name: formik.values.channelName };
+        dispatch(updateChannel({ id: modalInfo.channel.id, changes: updatedChannel }));
         formik.values.channelName = '';
         hideModal();
       }
@@ -44,7 +41,7 @@ const Add = (props) => {
   return (
       <Modal centered show>
         <Modal.Header closeButton onClick={() => hideModal()}>
-          <Modal.Title>Добавить канал</Modal.Title>
+          <Modal.Title>Переименовать канал</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
@@ -87,5 +84,5 @@ const Add = (props) => {
   );
 };
 
-export default Add;
+export default Rename;
 // END
