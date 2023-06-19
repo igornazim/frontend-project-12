@@ -40,7 +40,7 @@ const Chat = () => {
 
   const channels = useSelector(channelsSelector.selectAll);
   const messages = useSelector(messagesSelector.selectAll);
-  
+
   const { currentUser } = useAuth();
   const { socket } = useSocket();
 
@@ -49,7 +49,7 @@ const Chat = () => {
       text: "",
     },
     onSubmit: (values) => {
-      socket.emit('newMessage', { body: JSON.stringify(values.text), channelId: 1, username: 'admin' }, (response) => {
+      socket.emit('newMessage', { body: JSON.stringify(values.text), channelId: currentId, username: 'admin' }, (response) => {
         console.log(response.status);
       });
       socket.on('newMessage', (payload) => {
