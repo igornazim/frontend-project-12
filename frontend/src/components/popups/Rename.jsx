@@ -4,11 +4,13 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { updateChannel, channelsSelector } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
+import useSocket from "../../hooks/useSocket.jsx";
 
 const Rename = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
+  const { socket } = useSocket();
   const { hideModal, modalInfo } = props;
   const inputEl = useRef(null);
   useEffect(() => {
@@ -31,7 +33,10 @@ const Rename = (props) => {
     onSubmit: () => {
       if (formik.values.channelName !== '') {
         const updatedChannel = {...modalInfo.channel, name: formik.values.channelName };
-        dispatch(updateChannel({ id: modalInfo.channel.id, changes: updatedChannel }));
+        socket.emit('renameChannel', updatedChannel);
+        socket.on('renameChannel', (payload) => {
+          dispatch(updateChannel({ id: modalInfo.channel.id, changes: payload }));
+        });
         formik.values.channelName = '';
         hideModal();
       }

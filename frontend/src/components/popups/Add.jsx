@@ -4,14 +4,16 @@ import { useFormik } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { addChannel, channelsSelector } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-import useAuth from "../../hooks/Index.jsx";
+// import useAuth from "../../hooks/Index.jsx";
 import * as Yup from "yup";
+import useSocket from "../../hooks/useSocket.jsx";
 
 const Add = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
   const dispatch = useDispatch();
+  const { socket } = useSocket();
   const { hideModal } = props;
   const inputEl = useRef(null);
   useEffect(() => {
@@ -33,8 +35,11 @@ const Add = (props) => {
     validationSchema: addingSchema,
     onSubmit: () => {
       if (formik.values.channelName !== '') {
-        const newChannel = { id: _.uniqueId(), name: formik.values.channelName, removable: true, currentUser };
-        dispatch(addChannel(newChannel));
+        const newChannel = { id: _.uniqueId(), name: formik.values.channelName, removable: true };
+        socket.emit('newChannel', newChannel);
+        socket.on('newChannel', (payload) => {
+          dispatch(addChannel(payload));
+        });
         formik.values.channelName = '';
         hideModal();
       }
