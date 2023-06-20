@@ -1,17 +1,16 @@
 import { Modal, Form, Button, FormGroup } from 'react-bootstrap';
-import { removeChannel, channelsSelector } from '../../slices/channelsSlice.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { removeChannel, setCurrentChannelId } from '../../slices/channelsSlice.js';
+import { useDispatch } from 'react-redux';
 import useSocket from "../../hooks/useSocket.jsx";
 
 const Remove = (props) => {
-  const channels = useSelector(channelsSelector.selectAll);
   const dispatch = useDispatch();
   const { socket } = useSocket();
-  const { hideModal, modalInfo, setId } = props;
+  const { hideModal, modalInfo } = props;
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setId(channels[0].id);
+    dispatch(setCurrentChannelId(1));
     socket.emit('removeChannel', { id: modalInfo.channel.id });
     socket.on('removeChannel', (payload) => {
     dispatch(removeChannel(payload.id));

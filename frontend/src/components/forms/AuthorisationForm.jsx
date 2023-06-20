@@ -33,7 +33,8 @@ const AuthorisationForm = () => {
           password: formik.values.password,
           token: res.data,
         };
-        auth.logIn(user);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        auth.logIn(res.data);
         navigate("/");
       } catch (err) {
         formik.setSubmitting(false);

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import routes from '../routes.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { setChannels, channelsSelector } from '../slices/channelsSlice.js';
+import { setChannels, setCurrentChannelId, channelsSelector } from '../slices/channelsSlice.js';
 import { addMessage, messagesSelector } from '../slices/messagesSlice.js';
 import { useFormik } from "formik";
 import useAuth from "../hooks/Index.jsx";
@@ -12,9 +12,9 @@ import useSocket from "../hooks/useSocket.jsx";
 import getModal from "../getModal.js";
 
 const getAuthHeader = () => {
-  const userId = JSON.parse(localStorage.getItem('userId'));
-  if (userId && userId.token) {
-    return { Authorization: `Bearer ${userId.token}` };
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user && user.token) {
+    return { Authorization: `Bearer ${user.token}` };
   }
 
   return {};
@@ -35,11 +35,11 @@ const Chat = () => {
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const hideModal = () => setModalInfo({ type: null, channel: null });
 
-  const [currentId, setId] = useState(1);
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector.selectAll);
   const messages = useSelector(messagesSelector.selectAll);
+  const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
 
   const { currentUser } = useAuth();
   const { socket } = useSocket();
@@ -79,7 +79,7 @@ const Chat = () => {
               <Dropdown className="w-100" as={ButtonGroup}>
                 <Button
                   variant={currentId === channel.id ? 'secondary' : null}
-                  onClick={() => setId(channel.id)}
+                  onClick={() => dispatch(setCurrentChannelId(channel.id))}
                   className="w-100 rounded-0 text-start text-truncate"
                 >
                   {`# ${channel.name}`}
@@ -102,7 +102,7 @@ const Chat = () => {
               variant={currentId === channel.id ? 'secondary' : null}
               type="button"
               className="w-100 rounded-0 text-start"
-              onClick={() => setId(channel.id)}
+              onClick={() => dispatch(setCurrentChannelId(channel.id))}
             >
               <span className="me-1">#</span>
               {channel.name}
@@ -194,7 +194,7 @@ const Chat = () => {
           </div>
         </Col>
       </Row>
-      {renderModal({ modalInfo, hideModal, setId })}
+      {renderModal({ modalInfo, hideModal })}
     </Container>
   );
 };

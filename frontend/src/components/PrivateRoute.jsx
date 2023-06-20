@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from "react-router-dom";
 
 const AuthRoute = ({ children }) => {
-  const userId = JSON.parse(localStorage.getItem("userId"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
-  if (userId && userId.token) {
+  if (user && user.token) {
     return children;
   }
 

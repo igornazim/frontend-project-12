@@ -9,16 +9,16 @@ import Page404 from "./Page404.jsx";
 import AuthContext from "./contexts/Index.jsx";
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const userData = JSON.parse(localStorage.getItem('user'));
   const logIn = (user) => {
-    const { token } = user;
-    localStorage.setItem("userId", JSON.stringify(token));
     setCurrentUser(user);
   };
   const logOut = () => {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
     setCurrentUser(null);
   };
+
+  const [currentUser, setCurrentUser] = useState(userData);
 
   return (
     <AuthContext.Provider value={{ currentUser, logIn, logOut }}>
