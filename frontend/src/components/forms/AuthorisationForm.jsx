@@ -28,11 +28,6 @@ const AuthorisationForm = () => {
       setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        const user = {
-          username: formik.values.username,
-          password: formik.values.password,
-          token: res.data,
-        };
         localStorage.setItem("user", JSON.stringify(res.data));
         auth.logIn(res.data);
         navigate("/");
