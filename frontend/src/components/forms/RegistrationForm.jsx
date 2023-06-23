@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Button,
   Form,
@@ -7,11 +8,18 @@ import {
   FloatingLabel,
   Row,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/Index.jsx";
+import routes from "../../routes.js";
 import { useFormik } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
 
 const RegistrationForm = () => {
+  const [regFailed, setRegFailed] = useState(true);
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   const SignupSchema = Yup.object().shape({
     username: Yup.string()
       .min(3, "Минимум 3 символа")
@@ -33,7 +41,22 @@ const RegistrationForm = () => {
       confirmPassword: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => console.log(values),
+    onSubmit: async (values) => {
+      setRegFailed(false);
+      try {
+        const res = await axios.post(routes.signUpPath(), values);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        auth.logIn(res.data);
+        navigate("/");
+      } catch (err) {
+        formik.setSubmitting(false);
+        if (err.isAxiosError && err.response.status === 401) {
+          setRegFailed(true);
+          return;
+        }
+        throw err;
+      }
+    },
   });
 
   return (
@@ -71,7 +94,7 @@ const RegistrationForm = () => {
                       onChange={formik.handleChange}
                       value={formik.values.username}
                       isInvalid={
-                        !!formik.errors.username && formik.touched.password
+                        !!formik.errors.username || !regFailed
                       }
                     />
                     <Form.Control.Feedback
@@ -99,7 +122,7 @@ const RegistrationForm = () => {
                       onChange={formik.handleChange}
                       value={formik.values.password}
                       isInvalid={
-                        !!formik.errors.password && formik.touched.password
+                        !!formik.errors.password || !regFailed
                       }
                     />
                     <Form.Control.Feedback
@@ -126,8 +149,7 @@ const RegistrationForm = () => {
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
                       isInvalid={
-                        !!formik.errors.confirmPassword &&
-                        formik.touched.password
+                        !!formik.errors.confirmPassword || !regFailed
                       }
                     />
                     <Form.Control.Feedback
@@ -136,6 +158,13 @@ const RegistrationForm = () => {
                       tooltip
                     >
                       {formik.errors.confirmPassword}
+                    </Form.Control.Feedback>
+                    <Form.Control.Feedback
+                      placement="right"
+                      type="invalid"
+                      tooltip
+                    >
+                      {regFailed ? null : 'Такой пользователь уже существует'}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
