@@ -2,11 +2,14 @@ import { Modal, Form, Button, FormGroup } from 'react-bootstrap';
 import { removeChannel, setCurrentChannelId } from '../../slices/channelsSlice.js';
 import { useDispatch } from 'react-redux';
 import useSocket from "../../hooks/useSocket.jsx";
+import { useTranslation } from 'react-i18next';
 
 const Remove = (props) => {
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const { hideModal, modalInfo } = props;
+
+  const { t } = useTranslation();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -21,20 +24,20 @@ const Remove = (props) => {
   return (
     <Modal centered show>
       <Modal.Header closeButton onClick={() => hideModal()}>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.remove.headline')}</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form onSubmit={(e) => onSubmit(e)}>
           <p className="lead">Уверены?</p>
           <FormGroup className="d-flex justify-content-end">
-            <Form.Label className="visually-hidden">Уверены?</Form.Label>
+            <Form.Label className="visually-hidden">{t('modals.remove.subText')}</Form.Label>
             <Button
               variant="secondary"
               onClick={() => hideModal()}
               className="me-2"
             >
-              Отменить
+              {t('modals.remove.cancelButton')}
             </Button>
             <Button
               className="btn btn-danger me-2"
@@ -42,7 +45,7 @@ const Remove = (props) => {
               type="submit"
               value="remove"
             >
-            Удалить
+            {t('modals.remove.submitButton')}
           </Button>
           </FormGroup>
         </Form>

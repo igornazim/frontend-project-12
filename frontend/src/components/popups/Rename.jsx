@@ -5,6 +5,7 @@ import { updateChannel, channelsSelector } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 import useSocket from "../../hooks/useSocket.jsx";
+import { useTranslation } from 'react-i18next';
 
 const Rename = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
@@ -17,11 +18,13 @@ const Rename = (props) => {
     inputEl.current.focus();
   });
 
+  const { t } = useTranslation();
+
   const renaimingSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, "Минимум 3 символа")
-      .required("Обязательное поле")
-      .notOneOf(channelsNames, "Должно быть уникальным")
+      .min(3, t('errors.nameMinlength'))
+      .required(('errors.required'))
+      .notOneOf(channelsNames, t('errors.notOneOfChannel'))
   });
 
   const formik = useFormik({
@@ -46,7 +49,7 @@ const Rename = (props) => {
   return (
       <Modal centered show>
         <Modal.Header closeButton onClick={() => hideModal()}>
-          <Modal.Title>Переименовать канал</Modal.Title>
+          <Modal.Title>{t('modals.rename.headline')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
@@ -73,14 +76,14 @@ const Rename = (props) => {
               onClick={() => hideModal()}
               className="me-2"
             >
-            Отменить
+            {t('modals.rename.cancelButton')}
           </Button>
           <Button
             variant="primary"
             type="submit"
             value="submit"
           >
-            Отправить
+            {t('modals.rename.submitButton')}
           </Button>
           </Form.Group>
           </Form>

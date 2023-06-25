@@ -13,11 +13,14 @@ import useAuth from "../../hooks/Index.jsx";
 import routes from "../../routes.js";
 import { useFormik } from "formik";
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 const AuthorisationForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -60,7 +63,7 @@ const AuthorisationForm = () => {
                 className="col-12 col-md-6 mt-3 mt-mb-0"
               >
                 <h1 className="text-center mb-4" as="h1">
-                  Войти
+                  {t('authForm.headline')}
                 </h1>
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel
@@ -102,7 +105,7 @@ const AuthorisationForm = () => {
                       type="invalid"
                       tooltip
                     >
-                      Неверные имя пользователя или пароль
+                      {t('errors.incorrectNameOrPass')}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
@@ -111,13 +114,13 @@ const AuthorisationForm = () => {
                   variant="outline-primary"
                   type="submit"
                 >
-                  Войти
+                  {t('authForm.logInButton')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="text-center p-4">
-              <span>Нет аккаунта?</span>{" "}
-              <Link to="/signup">Зарегистрироваться</Link>
+              <span>{t('authForm.footerText')}</span>{" "}
+              <Link to="/signup">{t('authForm.footerButton')}</Link>
             </Card.Footer>
           </Card>
         </Container>

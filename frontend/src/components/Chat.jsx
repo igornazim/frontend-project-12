@@ -5,11 +5,12 @@ import axios from 'axios';
 import routes from '../routes.js';
 import { useSelector, useDispatch } from 'react-redux';
 import { setChannels, setCurrentChannelId, channelsSelector } from '../slices/channelsSlice.js';
-import { addMessage, messagesSelector } from '../slices/messagesSlice.js';
+import { setMessages, addMessage, messagesSelector } from '../slices/messagesSlice.js';
 import { useFormik } from "formik";
 import useAuth from "../hooks/Index.jsx";
 import useSocket from "../hooks/useSocket.jsx";
 import getModal from "../getModal.js";
+import { useTranslation } from 'react-i18next';
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -37,12 +38,14 @@ const Chat = () => {
 
   const dispatch = useDispatch();
 
-  const channels = useSelector(channelsSelector.selectAll);
-  const messages = useSelector(messagesSelector.selectAll);
   const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
+  const channels = useSelector(channelsSelector.selectAll);
+  const messages = useSelector(messagesSelector.selectAll).filter(({ channelId }) => channelId === currentId);
 
   const { currentUser } = useAuth();
   const { socket } = useSocket();
+
+  const { t } = useTranslation();
 
   const formik = useFormik({
     initialValues: {
@@ -63,6 +66,7 @@ const Chat = () => {
     const fetchContent = async () => {
       const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
       dispatch(setChannels(data.channels));
+      dispatch(setMessages(data.messages)); // новое
     };
     fetchContent();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -89,8 +93,8 @@ const Chat = () => {
                   variant={currentId === channel.id ? 'secondary' : null}
                   id="dropdown-split-basic" />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => showModal('removing', channel)} href="#/action-1">Удалить</Dropdown.Item>
-                  <Dropdown.Item onClick={() => showModal('renaiming', channel)} href="#/action-2">Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('removing', channel)} href="#/action-1">{t('chat.dropdownItemDelete')}</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('renaiming', channel)} href="#/action-2">{t('chat.dropdownItemRename')}</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>
@@ -131,7 +135,7 @@ const Chat = () => {
       <Row className="h-100 bg-white flex-md-row">
         <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
           <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-            <b>Каналы</b>
+            <b>{t('chat.headline')}</b>
             <Button
               onClick={() => showModal('adding')}
               type="button"
@@ -157,7 +161,7 @@ const Chat = () => {
               <p className="m-0">
                 <b>{`# ${channels.length >= 2 ? channels.find(({ id }) => id === currentId).name : 'general'}`}</b>
               </p>
-              <span className="text-muted">0 сообщений</span>
+              <span className="text-muted">{t('chat.counter.count', { count: messages.length })}</span>
             </div>
             <div
               id="messages-box"
@@ -171,8 +175,9 @@ const Chat = () => {
                 <div className="input-group has-validation">
                   <input
                     name="text"
+                    required
                     aria-label="Новое сообщение"
-                    placeholder="Введите сообщение..."
+                    placeholder={t('chat.inputText')}
                     className="border-0 p-0 ps-2 form-control"
                     value={formik.values.text}
                     onChange={formik.handleChange}

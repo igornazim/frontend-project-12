@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import useAuth from "../../hooks/Index.jsx";
 import * as Yup from "yup";
 import useSocket from "../../hooks/useSocket.jsx";
+import { useTranslation } from 'react-i18next';
 
 const Add = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
@@ -20,11 +21,13 @@ const Add = (props) => {
     inputEl.current.focus();
   });
 
+  const { t } = useTranslation();
+
   const addingSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, "Минимум 3 символа")
-      .required("Обязательное поле")
-      .notOneOf(channelsNames, "Должно быть уникальным")
+      .min(3, t('errors.nameMinlength'))
+      .required(t('errors.required'))
+      .notOneOf(channelsNames, t('errors.notOneOfChannel'))
   });
 
   const formik = useFormik({
@@ -49,7 +52,7 @@ const Add = (props) => {
   return (
       <Modal centered show>
         <Modal.Header closeButton onClick={() => hideModal()}>
-          <Modal.Title>Добавить канал</Modal.Title>
+          <Modal.Title>{t('modals.add.headline')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
@@ -76,14 +79,14 @@ const Add = (props) => {
               onClick={() => hideModal()}
               className="me-2"
             >
-            Отменить
+            {t('modals.add.cancelButton')}
           </Button>
           <Button
             variant="primary"
             type="submit"
             value="submit"
           >
-            Отправить
+            {t('modals.add.submitButton')}
           </Button>
           </Form.Group>
           </Form>

@@ -14,23 +14,26 @@ import routes from "../../routes.js";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
+import { useTranslation } from 'react-i18next';
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);
   const auth = useAuth();
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
+
   const SignupSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, "Минимум 3 символа")
-      .max(20, "Максимум 20 символов")
-      .required("Обязательное поле"),
+      .min(3, t('errors.nameMinlength'))
+      .max(20, t('errors.nameMaxlength'))
+      .required(t('errors.required')),
     password: Yup.string()
-      .min(6, "Минимум 6 символов")
-      .required("Обязательное поле"),
+      .min(6, t('errors.passwordMinLenth'))
+      .required(t('errors.required')),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref("password"), null],
-      "Пароли должны совпадать"
+      t('errors.confirmPassword')
     ),
   });
 
@@ -77,7 +80,7 @@ const RegistrationForm = () => {
                 className="col-12 col-md-6 mt-3 mt-mb-0"
               >
                 <h1 className="text-center mb-4" as="h1">
-                  Регистрация
+                {t('signUpForm.headline')}
                 </h1>
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel
@@ -164,7 +167,7 @@ const RegistrationForm = () => {
                       type="invalid"
                       tooltip
                     >
-                      {regFailed ? null : 'Такой пользователь уже существует'}
+                      {regFailed ? null : t('errors.notOneOfUser')}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
@@ -173,12 +176,12 @@ const RegistrationForm = () => {
                   variant="outline-primary"
                   type="submit"
                 >
-                  Зарегистрироваться
+                  {t('signUpForm.signUpButton')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="text-center p-4">
-              <span>Уже зарегистрированы?</span> <Link to="/login">Войти</Link>
+              <span>{t('signUpForm.footerText')}</span> <Link to="/login">{t('signUpForm.footerButton')}</Link>
             </Card.Footer>
           </Card>
         </Container>
