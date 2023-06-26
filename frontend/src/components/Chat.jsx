@@ -11,14 +11,8 @@ import useAuth from "../hooks/Index.jsx";
 import useSocket from "../hooks/useSocket.jsx";
 import getModal from "../getModal.js";
 import { useTranslation } from 'react-i18next';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-
-const notify = () => {
-  toast.success("Сообщение отправлено!", {
-    position: toast.POSITION.TOP_RIGHT
-  });
-};
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -67,7 +61,6 @@ const Chat = () => {
         dispatch(addMessage(payload));
       });
       values.text = '';
-      notify()
     },
   });
 

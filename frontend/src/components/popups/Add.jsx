@@ -8,6 +8,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 import useSocket from "../../hooks/useSocket.jsx";
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+const AddChannelNotify = () => {
+  toast.success('Канал добавлен!', {
+    position: toast.POSITION.TOP_RIGHT
+  });
+};
 
 const Add = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
@@ -45,6 +53,7 @@ const Add = (props) => {
         });
         formik.values.channelName = '';
         hideModal();
+        AddChannelNotify();
       }
     },
   });

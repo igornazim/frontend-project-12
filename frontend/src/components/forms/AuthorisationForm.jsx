@@ -14,6 +14,14 @@ import routes from "../../routes.js";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useTranslation } from 'react-i18next';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+const errNetworkNotify = () => {
+  toast.error('Ошибка соединения', {
+    position: toast.POSITION.TOP_RIGHT
+  });
+};
 
 const AuthorisationForm = () => {
   const [authFailed, setAuthFailed] = useState(false);
@@ -36,6 +44,10 @@ const AuthorisationForm = () => {
         navigate("/");
       } catch (err) {
         formik.setSubmitting(false);
+        if (err.code === 'ERR_NETWORK') {
+          console.log(err.code)
+          errNetworkNotify();
+        }
         if (err.isAxiosError && err.response.status === 401) {
           setAuthFailed(true);
           return;
@@ -46,6 +58,7 @@ const AuthorisationForm = () => {
   });
 
   return (
+    <>
     <Container className="container-fluid h-100">
       <Row className="justify-content-center align-content-center h-100">
         <Container className="col-12 col-md-8 col-xxl-6">
@@ -126,6 +139,8 @@ const AuthorisationForm = () => {
         </Container>
       </Row>
     </Container>
+    <ToastContainer />
+    </>
   );
 };
 

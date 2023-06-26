@@ -3,6 +3,14 @@ import { removeChannel, setCurrentChannelId } from '../../slices/channelsSlice.j
 import { useDispatch } from 'react-redux';
 import useSocket from "../../hooks/useSocket.jsx";
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+const RemoveChannelNotify = () => {
+  toast.success('Канал удалён', {
+    position: toast.POSITION.TOP_RIGHT
+  });
+};
 
 const Remove = (props) => {
   const dispatch = useDispatch();
@@ -19,6 +27,7 @@ const Remove = (props) => {
     dispatch(removeChannel(payload.id));
     });
     hideModal();
+    RemoveChannelNotify();
   };
 
   return (
