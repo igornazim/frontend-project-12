@@ -16,7 +16,7 @@ const Rename = (props) => {
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.focus();
-  });
+  }, []);
 
   const { t } = useTranslation();
 

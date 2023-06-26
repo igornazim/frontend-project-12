@@ -1,5 +1,5 @@
 import { Container, Row, Col, Image, Form, Nav, ToggleButton, ButtonGroup, Button, Dropdown} from "react-bootstrap";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import _ from 'lodash';
 import axios from 'axios';
 import routes from '../routes.js';
@@ -11,6 +11,14 @@ import useAuth from "../hooks/Index.jsx";
 import useSocket from "../hooks/useSocket.jsx";
 import getModal from "../getModal.js";
 import { useTranslation } from 'react-i18next';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
+const notify = () => {
+  toast.success("Сообщение отправлено!", {
+    position: toast.POSITION.TOP_RIGHT
+  });
+};
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -59,6 +67,7 @@ const Chat = () => {
         dispatch(addMessage(payload));
       });
       values.text = '';
+      notify()
     },
   });
 
@@ -70,6 +79,11 @@ const Chat = () => {
     };
     fetchContent();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const inputEl = useRef(null);
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
 
   const renderChannels = () => {
     if (channels.length === 0) {
@@ -131,6 +145,7 @@ const Chat = () => {
   }
 
   return (
+    <>
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
       <Row className="h-100 bg-white flex-md-row">
         <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
@@ -174,6 +189,7 @@ const Chat = () => {
               <Form noValidate="" onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
                 <div className="input-group has-validation">
                   <input
+                    ref={inputEl}
                     name="text"
                     required
                     aria-label="Новое сообщение"
@@ -201,6 +217,8 @@ const Chat = () => {
       </Row>
       {renderModal({ modalInfo, hideModal })}
     </Container>
+    <ToastContainer />
+    </>
   );
 };
 
