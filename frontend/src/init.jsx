@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import resources from './locales/index.js';
-import { Provider as RollbarProvider } from '@rollbar/react';
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
 const init = async () => {
   const rollbarConfig = {
@@ -29,13 +29,15 @@ const init = async () => {
 
   return (
     <RollbarProvider config={rollbarConfig}>
-      <I18nextProvider i18n={i18nextInstance}>
-        <Provider store={store}>
-          <SocketContext.Provider value={{ socket }}>
-            <App />
-          </SocketContext.Provider>
-        </Provider>
-      </I18nextProvider>
+      <ErrorBoundary>
+        <I18nextProvider i18n={i18nextInstance}>
+          <Provider store={store}>
+            <SocketContext.Provider value={{ socket }}>
+              <App />
+            </SocketContext.Provider>
+          </Provider>
+        </I18nextProvider>
+      </ErrorBoundary>
     </RollbarProvider>
   );
 };
