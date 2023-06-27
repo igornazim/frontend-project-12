@@ -13,6 +13,8 @@ import getModal from "../getModal.js";
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useRollbar } from '@rollbar/react';
+
 const filter = require('leo-profanity');
 filter.loadDictionary('ru');
 
@@ -36,6 +38,7 @@ const renderModal = ({ modalInfo, hideModal, setId }) => {
 };
 
 const Chat = () => {
+  const rollbar = useRollbar();
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const hideModal = () => setModalInfo({ type: null, channel: null });
@@ -68,9 +71,13 @@ const Chat = () => {
 
   useEffect(() => {
     const fetchContent = async () => {
-      const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
-      dispatch(setChannels(data.channels));
-      dispatch(setMessages(data.messages)); // новое
+      try {
+        const { data } = await axios.get(routes.usersPath(), { headers: getAuthHeader() });
+        dispatch(setChannels(data.channels));
+        dispatch(setMessages(data.messages));
+      } catch (error) {
+        rollbar.error('Error fetching contact', error);
+      }
     };
     fetchContent();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

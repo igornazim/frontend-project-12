@@ -16,6 +16,7 @@ import axios from "axios";
 import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useRollbar } from '@rollbar/react';
 
 const errNetworkNotify = () => {
   toast.error('Ошибка соединения', {
@@ -24,6 +25,8 @@ const errNetworkNotify = () => {
 };
 
 const AuthorisationForm = () => {
+  const rollbar = useRollbar();
+  console.log(rollbar)
   const [authFailed, setAuthFailed] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
@@ -52,6 +55,7 @@ const AuthorisationForm = () => {
           setAuthFailed(true);
           return;
         }
+        rollbar.error('Error submit', err);
         throw err;
       }
     },
