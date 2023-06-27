@@ -13,6 +13,8 @@ import getModal from "../getModal.js";
 import { useTranslation } from 'react-i18next';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+const filter = require('leo-profanity');
+filter.loadDictionary('ru');
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -188,7 +190,7 @@ const Chat = () => {
                     aria-label="Новое сообщение"
                     placeholder={t('chat.inputText')}
                     className="border-0 p-0 ps-2 form-control"
-                    value={formik.values.text}
+                    value={filter.clean(formik.values.text)}
                     onChange={formik.handleChange}
                   />
                   <Button
