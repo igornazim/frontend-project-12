@@ -20,7 +20,7 @@ const resources = {
         headline: 'Войти',
         logInButton: 'Войти',
         footerText: 'Нет аккаунта?',
-        footerButton: 'Зарегистрироваться',
+        footerButton: 'Регистрация',
       },
       signUpForm: {
         headline: 'Регистрация',
