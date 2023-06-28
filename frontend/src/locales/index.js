@@ -4,7 +4,7 @@ const resources = {
       errors: {
         nameMinlength: 'От 3 до 20 символов',
         namaMaxlength: 'Максимум 20 символов',
-        passwordMinLenth: 'Минимум 6 символов',
+        passwordMinLenth: 'Не менее 6 символов',
         required: 'Обязательное поле',
         confirmPassword: 'Пароли должны совпадать',
         notOneOfUser: 'Такой пользователь уже существует',
