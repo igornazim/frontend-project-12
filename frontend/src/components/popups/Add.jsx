@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 const AddChannelNotify = () => {
-  toast.success('Канал добавлен!', {
+  toast.success('Канал создан', {
     position: toast.POSITION.TOP_RIGHT
   });
 };

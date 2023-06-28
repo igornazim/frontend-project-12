@@ -2,7 +2,7 @@ const resources = {
   ru: {
     translation: {
       errors: {
-        nameMinlength: 'Минимум 3 символа',
+        nameMinlength: 'От 3 до 20 символов',
         namaMaxlength: 'Максимум 20 символов',
         passwordMinLenth: 'Минимум 6 символов',
         required: 'Обязательное поле',
