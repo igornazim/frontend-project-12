@@ -14,6 +14,11 @@ const init = async () => {
     environment: 'production',
   };
 
+  function TestError() {
+    const a = null;
+    return a.hello();
+  }
+
   const socket = io();
 
   const i18nextInstance = i18next.createInstance();
@@ -30,6 +35,7 @@ const init = async () => {
   return (
     <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary>
+      <TestError />
         <I18nextProvider i18n={i18nextInstance}>
           <Provider store={store}>
             <SocketContext.Provider value={{ socket }}>

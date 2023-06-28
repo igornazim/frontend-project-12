@@ -26,7 +26,6 @@ const errNetworkNotify = () => {
 
 const AuthorisationForm = () => {
   const rollbar = useRollbar();
-  console.log(rollbar)
   const [authFailed, setAuthFailed] = useState(false);
   const auth = useAuth();
   const navigate = useNavigate();
@@ -48,7 +47,6 @@ const AuthorisationForm = () => {
       } catch (err) {
         formik.setSubmitting(false);
         if (err.code === 'ERR_NETWORK') {
-          console.log(err.code)
           errNetworkNotify();
         }
         if (err.isAxiosError && err.response.status === 401) {
