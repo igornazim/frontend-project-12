@@ -11,6 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
+const filter = require('leo-profanity');
+filter.loadDictionary('en');
+
 const AddChannelNotify = () => {
   toast.success('Канал создан', {
     position: toast.POSITION.TOP_RIGHT
@@ -73,7 +76,7 @@ const Add = (props) => {
                 name="channelName"
                 required=""
                 onChange={formik.handleChange}
-                value={formik.values.channelName}
+                value={filter.clean(formik.values.channelName)}
                 isInvalid={
                   !!formik.errors.channelName && formik.touched.channelName
                 }
