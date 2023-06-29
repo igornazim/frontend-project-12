@@ -85,12 +85,11 @@ const RegistrationForm = () => {
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel
                     label="Имя пользователя"
-                    htmlFor="username"
+                    controlId="username"
                     className="mb-3"
                   >
                     <Form.Control
                       name="username"
-                      id="username"
                       type="text"
                       required
                       placeholder="Имя пользователя"
@@ -113,12 +112,11 @@ const RegistrationForm = () => {
                 <Form.Group className="form-floating mb-4">
                   <FloatingLabel
                     label="Пароль"
-                    htmlFor="password"
+                    controlId="password"
                     className="mb-3"
                   >
                     <Form.Control
                       name="password"
-                      id="password"
                       type="password"
                       required
                       placeholder="Пароль"
@@ -140,12 +138,11 @@ const RegistrationForm = () => {
                 <Form.Group className="form-floating mb-4">
                   <FloatingLabel
                     label="Подтвердите пароль"
-                    htmlFor="confirmPassword"
+                    controlId="confirmPassword"
                     className="mb-3"
                   >
                     <Form.Control
                       name="confirmPassword"
-                      id="confirmPassword"
                       type="password"
                       required
                       placeholder="Подтвердите пароль"

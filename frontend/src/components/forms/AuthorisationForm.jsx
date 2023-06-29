@@ -83,12 +83,11 @@ const AuthorisationForm = () => {
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel
                     label="Ваш ник"
-                    htmlFor="username"
+                    controlId="username"
                     className="mb-3"
                   >
                     <Form.Control
                       name="username"
-                      id="username"
                       type="text"
                       required
                       placeholder="Ваш ник"
@@ -102,12 +101,11 @@ const AuthorisationForm = () => {
                 <Form.Group className="form-floating mb-4">
                   <FloatingLabel
                     label="Пароль"
-                    htmlFor="password"
+                    controlId="password"
                     className="mb-3"
                   >
                     <Form.Control
                       name="password"
-                      id="password"
                       type="password"
                       required
                       placeholder="Пароль"
