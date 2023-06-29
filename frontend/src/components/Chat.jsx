@@ -16,7 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRollbar } from '@rollbar/react';
 
 const filter = require('leo-profanity');
-filter.loadDictionary('ru');
+filter.loadDictionary('en');
 
 const getAuthHeader = () => {
   const user = JSON.parse(localStorage.getItem('user'));
