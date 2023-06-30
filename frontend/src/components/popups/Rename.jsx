@@ -67,16 +67,11 @@ const Rename = (props) => {
         <Modal.Body>
           <Form onSubmit={formik.handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label
-                htmlFor="name"
-                className="visually-hidden">
-                Имя канала
-                </Form.Label>
+              <Form.Label className="visually-hidden">Имя канала</Form.Label>
               <Form.Control
-                id="name"
                 ref={inputEl}
                 data-testid="input-body"
-                name="name"
+                name="channelName"
                 required=""
                 onChange={formik.handleChange}
                 value={formik.values.channelName}
