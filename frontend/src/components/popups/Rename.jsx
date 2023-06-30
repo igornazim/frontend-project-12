@@ -73,7 +73,7 @@ const Rename = (props) => {
                 name="channelName"
                 required=""
                 onChange={formik.handleChange}
-                value={filter.clean(formik.values.channelName)}
+                value={formik.values.channelName}
                 isInvalid={
                   !!formik.errors.channelName && formik.touched.channelName
                 }

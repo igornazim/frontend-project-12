@@ -102,7 +102,7 @@ const Chat = () => {
                   onClick={() => dispatch(setCurrentChannelId(channel.id))}
                   className="w-100 rounded-0 text-start text-truncate"
                 >
-                  {`# ${channel.name}`}
+                  {`# ${filter.clean(channel.name)}`}
                 </Button>
                 <Dropdown.Toggle
                   split
@@ -140,7 +140,7 @@ const Chat = () => {
             <b>
               {currentUser.username}:
             </b>
-            {` ${JSON.parse(body)}`}
+            {` ${filter.clean(JSON.parse(body))}`}
           </div>
         ))
     )
@@ -197,7 +197,7 @@ const Chat = () => {
                     aria-label="Новое сообщение"
                     placeholder={t('chat.inputText')}
                     className="border-0 p-0 ps-2 form-control"
-                    value={filter.clean(formik.values.text)}
+                    value={formik.values.text}
                     onChange={formik.handleChange}
                   />
                   <Button
