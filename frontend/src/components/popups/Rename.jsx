@@ -26,7 +26,7 @@ const Rename = (props) => {
   const { hideModal, modalInfo } = props;
   const inputEl = useRef(null);
   useEffect(() => {
-    inputEl.current.focus();
+    inputEl.current.select();
   }, []);
 
   const { t } = useTranslation();
