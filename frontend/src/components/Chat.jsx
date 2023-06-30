@@ -95,7 +95,7 @@ const Chat = () => {
           channelId: currentId,
           username: 'admin',
         },
-        (response) => console.log(response.status)
+        (response) => console.log(response.status),
       );
       socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
       formik.values.text = '';

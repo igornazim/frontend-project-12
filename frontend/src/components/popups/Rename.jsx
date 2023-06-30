@@ -5,12 +5,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   updateChannel,
   channelsSelector,
   setCurrentChannelId,
 } from '../../slices/channelsSlice.js';
-import { useDispatch, useSelector } from 'react-redux';
 import useSocket from '../../hooks/useSocket.jsx';
 
 const filter = require('leo-profanity');
