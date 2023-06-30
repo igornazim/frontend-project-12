@@ -11,8 +11,12 @@ import {
   Dropdown,
 } from 'react-bootstrap';
 import React, { useEffect, useState, useRef } from 'react';
-import _ from "lodash";
+import _ from 'lodash';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRollbar } from '@rollbar/react';
 import routes from '../routes.js';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -25,16 +29,13 @@ import {
   addMessage,
   messagesSelector,
 } from '../slices/messagesSlice.js';
-import { useFormik } from 'formik';
 import useAuth from '../hooks/Index.jsx';
 import useSocket from '../hooks/useSocket.jsx';
 import getModal from '../getModal.js';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useRollbar } from '@rollbar/react';
 
 const filter = require('leo-profanity');
+
 filter.loadDictionary('en');
 
 const getAuthHeader = () => {
@@ -65,12 +66,8 @@ const Chat = () => {
   const dispatch = useDispatch();
 
   const channels = useSelector(channelsSelector.selectAll);
-  const currentId = useSelector(
-    (state) => state.channelsReducer.currentChannelId
-  );
-  const messages = useSelector(messagesSelector.selectAll).filter(
-    ({ channelId }) => channelId === currentId
-  );
+  const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
+  const messages = useSelector(messagesSelector.selectAll).filter(({ channelId }) => channelId === currentId);
 
   const { currentUser } = useAuth();
   const { socket } = useSocket();
@@ -89,11 +86,11 @@ const Chat = () => {
     initialValues: {
       text: '',
     },
-    onSubmit: (values) => {
+    onSubmit: () => {
       socket.emit(
         'newMessage',
         {
-          body: JSON.stringify(values.text),
+          body: JSON.stringify(formik.values.text),
           channelId: currentId,
           username: 'admin',
         },
@@ -101,10 +98,8 @@ const Chat = () => {
           console.log(response.status);
         }
       );
-      socket.on('newMessage', (payload) => {
-        dispatch(addMessage(payload));
-      });
-      values.text = '';
+      socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
+      formik.values.text = '';
     },
   });
 
@@ -138,7 +133,7 @@ const Chat = () => {
           <Nav.Item key={_.uniqueId()} className="w-100">
             <Dropdown className="w-100" as={ButtonGroup}>
               <Button
-                variant={currentId === channel.id ? "secondary" : null}
+                variant={currentId === channel.id ? 'secondary' : null}
                 onClick={() => dispatch(setCurrentChannelId(channel.id))}
                 className="w-100 rounded-0 text-start text-truncate"
               >
@@ -146,7 +141,7 @@ const Chat = () => {
               </Button>
               <Dropdown.Toggle
                 split
-                variant={currentId === channel.id ? "secondary" : null}
+                variant={currentId === channel.id ? 'secondary' : null}
                 id="dropdown-split-basic"
               >
                 <span className="visually-hidden">{t('chat.hiddenText')}</span>
@@ -172,7 +167,7 @@ const Chat = () => {
       return (
         <Nav.Item key={_.uniqueId()} className="w-100">
           <ToggleButton
-            variant={currentId === channel.id ? "secondary" : null}
+            variant={currentId === channel.id ? 'secondary' : null}
             type="button"
             className="w-100 rounded-0 text-start"
             onClick={() => dispatch(setCurrentChannelId(channel.id))}
@@ -185,14 +180,15 @@ const Chat = () => {
     });
   };
 
-  const renderMessages = () => {
-    return messages.map(({ body, id }) => (
+  const renderMessages = () => messages.map(({ body, id }) => (
       <div key={id} className="text-break mb-2">
-        <b>{currentUser.username}:</b>
+        <b>
+          {currentUser.username}
+          :
+        </b>
         {` ${filter.clean(JSON.parse(body))}`}
       </div>
     ));
-  };
 
   return (
     <>
@@ -202,7 +198,7 @@ const Chat = () => {
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('chat.headline')}</b>
               <Button
-                onClick={() => showModal("adding")}
+                onClick={() => showModal('adding')}
                 type="button"
                 variant="light"
                 className="p-0 text-primary btn btn-group-vertical"

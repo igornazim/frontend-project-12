@@ -9,12 +9,12 @@ import {
   Row,
 } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useAuth from '../../hooks/Index.jsx';
 import routes from '../../routes.js';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { useTranslation } from 'react-i18next';
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);
@@ -33,7 +33,7 @@ const RegistrationForm = () => {
       .required(t('errors.required')),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref('password'), null],
-      t('errors.confirmPassword')
+      t('errors.confirmPassword'),
     ),
   });
 
@@ -50,7 +50,7 @@ const RegistrationForm = () => {
         const res = await axios.post(routes.signUpPath(), values);
         localStorage.setItem('user', JSON.stringify(res.data));
         auth.logIn(res.data);
-        navigate("/");
+        navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
         if (err.isAxiosError && err.response.status === 401) {
@@ -105,7 +105,7 @@ const RegistrationForm = () => {
                       {formik.errors.username}
                     </Form.Control.Feedback>
                   </FloatingLabel>
-                  <Form.Text className="text-muted"></Form.Text>
+                  <Form.Text className="text-muted" />
                 </Form.Group>
                 <Form.Group className="form-floating mb-4">
                   <FloatingLabel
@@ -172,7 +172,8 @@ const RegistrationForm = () => {
               </Form>
             </Card.Body>
             <Card.Footer className="text-center p-4">
-              <span>{t('signUpForm.footerText')}</span>{' '}
+              <span>{t('signUpForm.footerText')}</span>
+              {' '}
               <Link to="/login">{t('signUpForm.footerButton')}</Link>
             </Card.Footer>
           </Card>

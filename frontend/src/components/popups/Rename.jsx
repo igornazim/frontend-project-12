@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Form, Button } from 'react-bootstrap';
 import {
   updateChannel,
@@ -10,8 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import useSocket from '../../hooks/useSocket.jsx';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
@@ -57,7 +58,7 @@ const Rename = (props) => {
         socket.emit('renameChannel', updatedChannel);
         socket.on('renameChannel', (payload) => {
           dispatch(
-            updateChannel({ id: modalInfo.channel.id, changes: payload })
+            updateChannel({ id: modalInfo.channel.id, changes: payload, })
           );
           dispatch(setCurrentChannelId(payload.id));
         });

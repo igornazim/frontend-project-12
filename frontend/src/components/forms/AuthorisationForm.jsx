@@ -8,6 +8,7 @@ import {
   FloatingLabel,
   Row,
 } from 'react-bootstrap';
+import { useRollbar } from '@rollbar/react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/Index.jsx';
 import routes from '../../routes.js';
@@ -16,7 +17,6 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRollbar } from '@rollbar/react';
 
 const errNetworkNotify = () => {
   toast.error('Ошибка соединения', {
@@ -43,7 +43,7 @@ const AuthorisationForm = () => {
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('user', JSON.stringify(res.data));
         auth.logIn(res.data);
-        navigate("/");
+        navigate('/');
       } catch (err) {
         formik.setSubmitting(false);
         if (err.code === 'ERR_NETWORK') {
@@ -96,7 +96,7 @@ const AuthorisationForm = () => {
                         value={formik.values.username}
                       />
                     </FloatingLabel>
-                    <Form.Text className="text-muted"></Form.Text>
+                    <Form.Text className="text-muted" />
                   </Form.Group>
                   <Form.Group className="form-floating mb-4">
                     <FloatingLabel
@@ -132,7 +132,8 @@ const AuthorisationForm = () => {
                 </Form>
               </Card.Body>
               <Card.Footer className="text-center p-4">
-                <span>{t('authForm.footerText')}</span>{' '}
+                <span>{t('authForm.footerText')}</span>
+                {' '}
                 <Link to="/signup">{t('authForm.footerButton')}</Link>
               </Card.Footer>
             </Card>

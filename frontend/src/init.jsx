@@ -1,3 +1,4 @@
+import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import App from './App';
 import { Provider } from 'react-redux';
 import store from './slices/index.js';
@@ -6,7 +7,6 @@ import { io } from 'socket.io-client';
 import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import resources from './locales/index.js';
-import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
 const init = async () => {
   const rollbarConfig = {

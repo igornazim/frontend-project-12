@@ -13,7 +13,7 @@ const channelsSlice = createSlice({
     updateChannel: channelsAdapter.updateOne,
     removeChannel: channelsAdapter.removeOne,
     setCurrentChannelId: (state, { payload }) => {
-      state.currentChannelId = payload;
+      state.currentChannelId = payload; /*eslint no-param-reassign: "error"*/
     },
   },
 });
@@ -26,8 +26,6 @@ export const {
   removeChannel,
   setCurrentChannelId,
 } = channelsSlice.actions;
-export const channelsSelector = channelsAdapter.getSelectors(
-  (state) => state.channelsReducer
-);
+export const channelsSelector = channelsAdapter.getSelectors((state) => state.channelsReducer);
 
 export default channelsSlice.reducer;
