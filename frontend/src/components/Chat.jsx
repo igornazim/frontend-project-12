@@ -56,7 +56,6 @@ const Chat = () => {
 
   const getCurrentChannel = () => {
     const currentChannel = channels.find(({ id }) => id === currentId);
-    console.log(channels, currentId)
     if (currentChannel) {
       return currentChannel.name;
     } return 'general';

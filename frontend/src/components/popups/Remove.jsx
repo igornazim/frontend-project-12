@@ -40,7 +40,9 @@ const Remove = (props) => {
         <Form onSubmit={(e) => onSubmit(e)}>
           <p className="lead">Уверены?</p>
           <FormGroup className="d-flex justify-content-end">
-            <Form.Label className="visually-hidden">{t('modals.remove.subText')}</Form.Label>
+            <Form.Label
+              className="visually-hidden">{t('modals.remove.subText')}
+            </Form.Label>
             <Button
               variant="secondary"
               onClick={() => hideModal()}
