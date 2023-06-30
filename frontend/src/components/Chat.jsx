@@ -114,7 +114,10 @@ const Chat = () => {
                 <Dropdown.Toggle
                   split
                   variant={currentId === channel.id ? 'secondary' : null}
-                  id="dropdown-split-basic" />
+                  id="dropdown-split-basic" 
+                  >
+                <span className="visually-hidden">{t('chat.hiddenText')}</span>
+                </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={() => showModal('removing', channel)} href="#/action-1">{t('chat.dropdownItemDelete')}</Dropdown.Item>
                   <Dropdown.Item onClick={() => showModal('renaiming', channel)} href="#/action-2">{t('chat.dropdownItemRename')}</Dropdown.Item>

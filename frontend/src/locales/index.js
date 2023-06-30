@@ -38,6 +38,7 @@ const resources = {
         inputText: 'Введите сообщение...',
         dropdownItemDelete: 'Удалить',
         dropdownItemRename: 'Переименовать',
+        hiddenText: 'Управление каналом',
       },
       modals: {
         add: {
