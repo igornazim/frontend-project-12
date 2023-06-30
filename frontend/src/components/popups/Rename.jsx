@@ -34,13 +34,13 @@ const Rename = (props) => {
   const renaimingSchema = Yup.object().shape({
     channelName: Yup.string()
       .min(3, t('errors.nameMinlength'))
-      .required(('errors.required'))
+      .required(t('errors.required'))
       .notOneOf(channelsNames, t('errors.notOneOfChannel'))
   });
 
   const formik = useFormik({
     initialValues: {
-      channelName: modalInfo.channel.name,
+      channelName: '',
       channel: {},
     },
     validationSchema: renaimingSchema,
