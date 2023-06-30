@@ -95,7 +95,8 @@ const Chat = () => {
           channelId: currentId,
           username: 'admin',
         },
-        (response) => console.log(response.status));
+        (response) => console.log(response.status)
+      );
       socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
       formik.values.text = '';
     },
@@ -179,13 +180,13 @@ const Chat = () => {
   };
 
   const renderMessages = () => messages.map(({ body, id }) => (
-      <div key={id} className="text-break mb-2">
-        <b>
+    <div key={id} className="text-break mb-2">
+      <b>
         {currentUser.username}
-          :
-        </b>
-        {` ${filter.clean(JSON.parse(body))}`}
-      </div>
+        :
+      </b>
+      {` ${filter.clean(JSON.parse(body))}`}
+    </div>
   ));
 
   return (

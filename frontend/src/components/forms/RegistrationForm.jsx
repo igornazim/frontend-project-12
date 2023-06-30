@@ -11,10 +11,10 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
-import useAuth from '../../hooks/Index.jsx';
-import routes from '../../routes.js';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import useAuth from '../../hooks/Index.jsx';
+import routes from '../../routes.js';
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);

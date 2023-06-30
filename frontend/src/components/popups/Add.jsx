@@ -4,16 +4,15 @@ import _ from 'lodash';
 import { useFormik } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import * as Yup from 'yup';
 import {
   addChannel,
   channelsSelector,
   setCurrentChannelId,
 } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
-// import useAuth from "../../hooks/Index.jsx";
-import * as Yup from 'yup';
 import useSocket from '../../hooks/useSocket.jsx';
-import { useTranslation } from 'react-i18next';
 
 const filter = require('leo-profanity');
 
@@ -28,7 +27,6 @@ const AddChannelNotify = () => {
 const Add = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
-  // const { currentUser } = useAuth();
   const dispatch = useDispatch();
   const { socket } = useSocket();
   const { hideModal } = props;
