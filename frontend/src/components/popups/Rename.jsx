@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { updateChannel, channelsSelector } from '../../slices/channelsSlice.js';
+import { updateChannel, channelsSelector, setCurrentChannelId } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from "yup";
 import useSocket from "../../hooks/useSocket.jsx";
@@ -50,6 +50,7 @@ const Rename = (props) => {
         socket.emit('renameChannel', updatedChannel);
         socket.on('renameChannel', (payload) => {
           dispatch(updateChannel({ id: modalInfo.channel.id, changes: payload }));
+          dispatch(setCurrentChannelId(payload.id))
         });
         formik.values.channelName = '';
         hideModal();
