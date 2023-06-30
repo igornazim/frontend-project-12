@@ -9,7 +9,7 @@ import Page404 from "./Page404.jsx";
 import AuthContext from "./contexts/Index.jsx";
 
 const AuthProvider = ({ children }) => {
-  const userData = JSON.parse(localStorage.getItem('user'));
+  const userData = JSON.parse(localStorage.getItem("user"));
   const logIn = (user) => {
     setCurrentUser(user);
   };

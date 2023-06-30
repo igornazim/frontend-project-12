@@ -1,14 +1,17 @@
-import { Modal, Form, Button, FormGroup } from 'react-bootstrap';
-import { removeChannel, setCurrentChannelId } from '../../slices/channelsSlice.js';
-import { useDispatch } from 'react-redux';
+import { Modal, Form, Button, FormGroup } from "react-bootstrap";
+import {
+  removeChannel,
+  setCurrentChannelId,
+} from "../../slices/channelsSlice.js";
+import { useDispatch } from "react-redux";
 import useSocket from "../../hooks/useSocket.jsx";
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const RemoveChannelNotify = () => {
   toast.success('Канал удалён', {
-    position: toast.POSITION.TOP_RIGHT
+    position: toast.POSITION.TOP_RIGHT,
   });
 };
 
@@ -24,7 +27,7 @@ const Remove = (props) => {
     dispatch(setCurrentChannelId(1));
     socket.emit('removeChannel', { id: modalInfo.channel.id });
     socket.on('removeChannel', (payload) => {
-    dispatch(removeChannel(payload.id));
+      dispatch(removeChannel(payload.id));
     });
     hideModal();
     RemoveChannelNotify();
@@ -40,8 +43,8 @@ const Remove = (props) => {
         <Form onSubmit={(e) => onSubmit(e)}>
           <p className="lead">Уверены?</p>
           <FormGroup className="d-flex justify-content-end">
-            <Form.Label
-              className="visually-hidden">{t('modals.remove.subText')}
+            <Form.Label className="visually-hidden">
+              {t('modals.remove.subText')}
             </Form.Label>
             <Button
               variant="secondary"
@@ -56,8 +59,8 @@ const Remove = (props) => {
               type="submit"
               value="remove"
             >
-            {t('modals.remove.submitButton')}
-          </Button>
+              {t('modals.remove.submitButton')}
+            </Button>
           </FormGroup>
         </Form>
       </Modal.Body>

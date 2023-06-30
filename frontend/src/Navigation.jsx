@@ -1,7 +1,7 @@
 import { Container, Navbar, Button } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import useAuth from "./hooks/Index.jsx";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const AuthButton = () => {
   const auth = useAuth();
@@ -32,7 +32,7 @@ const Navigation = () => {
       <Container>
         <Navbar.Brand>
           <Link className="navbar-brand" to="/">
-          {t('header.logoText')}
+            {t('header.logoText')}
           </Link>
         </Navbar.Brand>
         <AuthButton />

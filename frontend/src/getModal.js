@@ -1,6 +1,6 @@
-import Add from './components/popups/Add.jsx';
-import Rename from './components/popups/Rename.jsx';
-import Remove from './components/popups/Remove.jsx';
+import Add from "./components/popups/Add.jsx";
+import Rename from "./components/popups/Rename.jsx";
+import Remove from "./components/popups/Remove.jsx";
 
 const modals = {
   adding: Add,

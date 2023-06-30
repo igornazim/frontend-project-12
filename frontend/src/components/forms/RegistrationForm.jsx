@@ -14,7 +14,7 @@ import routes from "../../routes.js";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);
@@ -32,23 +32,23 @@ const RegistrationForm = () => {
       .min(6, t('errors.passwordMinLenth'))
       .required(t('errors.required')),
     confirmPassword: Yup.string().oneOf(
-      [Yup.ref("password"), null],
+      [Yup.ref('password'), null],
       t('errors.confirmPassword')
     ),
   });
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema: SignupSchema,
     onSubmit: async (values) => {
       setRegFailed(false);
       try {
         const res = await axios.post(routes.signUpPath(), values);
-        localStorage.setItem("user", JSON.stringify(res.data));
+        localStorage.setItem('user', JSON.stringify(res.data));
         auth.logIn(res.data);
         navigate("/");
       } catch (err) {
@@ -80,7 +80,7 @@ const RegistrationForm = () => {
                 className="col-12 col-md-6 mt-3 mt-mb-0"
               >
                 <h1 className="text-center mb-4" as="h1">
-                {t('signUpForm.headline')}
+                  {t('signUpForm.headline')}
                 </h1>
                 <Form.Group className="form-floating mb-3">
                   <FloatingLabel
@@ -95,9 +95,7 @@ const RegistrationForm = () => {
                       placeholder="Имя пользователя"
                       onChange={formik.handleChange}
                       value={formik.values.username}
-                      isInvalid={
-                        !!formik.errors.username || !regFailed
-                      }
+                      isInvalid={!!formik.errors.username || !regFailed}
                     />
                     <Form.Control.Feedback
                       placement="right"
@@ -122,9 +120,7 @@ const RegistrationForm = () => {
                       placeholder="Пароль"
                       onChange={formik.handleChange}
                       value={formik.values.password}
-                      isInvalid={
-                        !!formik.errors.password || !regFailed
-                      }
+                      isInvalid={!!formik.errors.password || !regFailed}
                     />
                     <Form.Control.Feedback
                       placement="right"
@@ -148,9 +144,7 @@ const RegistrationForm = () => {
                       placeholder="Подтвердите пароль"
                       onChange={formik.handleChange}
                       value={formik.values.confirmPassword}
-                      isInvalid={
-                        !!formik.errors.confirmPassword || !regFailed
-                      }
+                      isInvalid={!!formik.errors.confirmPassword || !regFailed}
                     />
                     <Form.Control.Feedback
                       placement="right"
@@ -178,7 +172,8 @@ const RegistrationForm = () => {
               </Form>
             </Card.Body>
             <Card.Footer className="text-center p-4">
-              <span>{t('signUpForm.footerText')}</span> <Link to="/login">{t('signUpForm.footerButton')}</Link>
+              <span>{t('signUpForm.footerText')}</span>{' '}
+              <Link to="/login">{t('signUpForm.footerButton')}</Link>
             </Card.Footer>
           </Card>
         </Container>
