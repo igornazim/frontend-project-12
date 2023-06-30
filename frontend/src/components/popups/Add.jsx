@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import _ from 'lodash';
 import { useFormik } from 'formik';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { addChannel, channelsSelector } from '../../slices/channelsSlice.js';
+import { addChannel, channelsSelector, setCurrentChannelId } from '../../slices/channelsSlice.js';
 import { useDispatch, useSelector } from 'react-redux';
 // import useAuth from "../../hooks/Index.jsx";
 import * as Yup from "yup";
@@ -53,6 +53,7 @@ const Add = (props) => {
         socket.emit('newChannel', newChannel);
         socket.on('newChannel', (payload) => {
           dispatch(addChannel(payload));
+          dispatch(setCurrentChannelId(payload.id))
         });
         formik.values.channelName = '';
         hideModal();

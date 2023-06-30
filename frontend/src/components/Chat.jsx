@@ -45,14 +45,22 @@ const Chat = () => {
 
   const dispatch = useDispatch();
 
-  const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
   const channels = useSelector(channelsSelector.selectAll);
+  const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
   const messages = useSelector(messagesSelector.selectAll).filter(({ channelId }) => channelId === currentId);
 
   const { currentUser } = useAuth();
   const { socket } = useSocket();
 
   const { t } = useTranslation();
+
+  const getCurrentChannel = () => {
+    const currentChannel = channels.find(({ id }) => id === currentId);
+    console.log(channels, currentId)
+    if (currentChannel) {
+      return currentChannel.name;
+    } return 'general';
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -176,7 +184,7 @@ const Chat = () => {
           <div className="d-flex flex-column h-100">
             <div className="bg-light mb-4 p-3 shadow-sm small">
               <p className="m-0">
-                <b>{`# ${channels.length >= 2 ? channels.find(({ id }) => id === currentId).name : 'general'}`}</b>
+                <b>{`# ${getCurrentChannel()}`}</b>
               </p>
               <span className="text-muted">{t('chat.counter.count', { count: messages.length })}</span>
             </div>
