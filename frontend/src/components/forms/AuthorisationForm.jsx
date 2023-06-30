@@ -9,14 +9,14 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useRollbar } from '@rollbar/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/Index.jsx';
 import routes from '../../routes.js';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const errNetworkNotify = () => {
   toast.error('Ошибка соединения', {

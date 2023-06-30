@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Modal, Form, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import {
   updateChannel,
   channelsSelector,
@@ -11,7 +12,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import useSocket from '../../hooks/useSocket.jsx';
-import { useTranslation } from 'react-i18next';
 
 const filter = require('leo-profanity');
 
@@ -57,9 +57,7 @@ const Rename = (props) => {
         };
         socket.emit('renameChannel', updatedChannel);
         socket.on('renameChannel', (payload) => {
-          dispatch(
-            updateChannel({ id: modalInfo.channel.id, changes: payload, })
-          );
+          dispatch(updateChannel({ id: modalInfo.channel.id, changes: payload, }));
           dispatch(setCurrentChannelId(payload.id));
         });
         formik.values.channelName = '';

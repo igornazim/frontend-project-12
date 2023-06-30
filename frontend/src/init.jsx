@@ -1,10 +1,10 @@
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
+import i18next from 'i18next';
 import App from './App';
 import { Provider } from 'react-redux';
 import store from './slices/index.js';
 import SocketContext from './contexts/socket.jsx';
 import { io } from 'socket.io-client';
-import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import resources from './locales/index.js';
 

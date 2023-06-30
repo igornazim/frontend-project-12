@@ -10,6 +10,8 @@ import AuthContext from './contexts/Index.jsx';
 
 const AuthProvider = ({ children }) => {
   const userData = JSON.parse(localStorage.getItem('user'));
+  const [currentUser, setCurrentUser] = useState(userData);
+
   const logIn = (user) => {
     setCurrentUser(user);
   };
@@ -18,8 +20,6 @@ const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
-  const [currentUser, setCurrentUser] = useState(userData);
-
   return (
     <AuthContext.Provider value={{ currentUser, logIn, logOut }}>
       {children}
@@ -27,29 +27,27 @@ const AuthProvider = ({ children }) => {
   );
 };
 
-const App = () => {
-  return (
-    <AuthProvider>
-      <BrowserRouter>
-        <div className="d-flex flex-column h-100">
-          <Navigation />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Chat />
-                </PrivateRoute>
-              }
-            />
-            <Route path="signup" element={<RegistrationForm />} />
-            <Route path="login" element={<AuthorisationForm />} />
-            <Route path="*" element={<Page404 />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
-  );
-};
+const App = () => (
+  <AuthProvider>
+    <BrowserRouter>
+      <div className="d-flex flex-column h-100">
+        <Navigation />
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <Chat />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="signup" element={<RegistrationForm />} />
+          <Route path="login" element={<AuthorisationForm />} />
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
+  </AuthProvider>
+);
 
 export default App;

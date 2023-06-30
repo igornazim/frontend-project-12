@@ -2,17 +2,17 @@ import {
   Modal,
   Form,
   Button,
-  FormGroup
+  FormGroup,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   removeChannel,
   setCurrentChannelId,
 } from '../../slices/channelsSlice.js';
-import { useDispatch } from 'react-redux';
 import useSocket from '../../hooks/useSocket.jsx';
-import { useTranslation } from 'react-i18next';
 
 const RemoveChannelNotify = () => {
   toast.success('Канал удалён', {

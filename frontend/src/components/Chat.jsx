@@ -17,8 +17,9 @@ import { useFormik } from 'formik';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRollbar } from '@rollbar/react';
-import routes from '../routes.js';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import routes from '../routes.js';
 import {
   setChannels,
   setCurrentChannelId,
@@ -32,7 +33,6 @@ import {
 import useAuth from '../hooks/Index.jsx';
 import useSocket from '../hooks/useSocket.jsx';
 import getModal from '../getModal.js';
-import { useTranslation } from 'react-i18next';
 
 const filter = require('leo-profanity');
 
@@ -67,7 +67,8 @@ const Chat = () => {
 
   const channels = useSelector(channelsSelector.selectAll);
   const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
-  const messages = useSelector(messagesSelector.selectAll).filter(({ channelId }) => channelId === currentId);
+  const messages = useSelector(messagesSelector.selectAll)
+    .filter(({ channelId }) => channelId === currentId);
 
   const { currentUser } = useAuth();
   const { socket } = useSocket();
@@ -94,10 +95,7 @@ const Chat = () => {
           channelId: currentId,
           username: 'admin',
         },
-        (response) => {
-          console.log(response.status);
-        }
-      );
+        (response) => console.log(response.status));
       socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
       formik.values.text = '';
     },
@@ -183,12 +181,12 @@ const Chat = () => {
   const renderMessages = () => messages.map(({ body, id }) => (
       <div key={id} className="text-break mb-2">
         <b>
-          {currentUser.username}
+        {currentUser.username}
           :
         </b>
         {` ${filter.clean(JSON.parse(body))}`}
       </div>
-    ));
+  ));
 
   return (
     <>
