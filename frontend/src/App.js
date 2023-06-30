@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RegistrationForm from "./components/forms/RegistrationForm.jsx";
-import AuthorisationForm from "./components/forms/AuthorisationForm.jsx";
-import Chat from "./components/Chat.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
-import Navigation from "./Navigation.jsx";
-import Page404 from "./Page404.jsx";
-import AuthContext from "./contexts/Index.jsx";
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import RegistrationForm from './components/forms/RegistrationForm.jsx';
+import AuthorisationForm from './components/forms/AuthorisationForm.jsx';
+import Chat from './components/Chat.jsx';
+import PrivateRoute from './components/PrivateRoute.jsx';
+import Navigation from './Navigation.jsx';
+import Page404 from './Page404.jsx';
+import AuthContext from './contexts/Index.jsx';
 
 const AuthProvider = ({ children }) => {
-  const userData = JSON.parse(localStorage.getItem("user"));
+  const userData = JSON.parse(localStorage.getItem('user'));
   const logIn = (user) => {
     setCurrentUser(user);
   };
   const logOut = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
     setCurrentUser(null);
   };
 

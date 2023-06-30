@@ -1,9 +1,9 @@
-import { Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Page404 = () => {
   return (
-    <Container className="text-center">
+    <Container className='text-center'>
       <h1>404</h1>
       <h3>Страница не найдена</h3>
       <p>

@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from "react";
-import { useFormik } from "formik";
-import { Modal, Form, Button } from "react-bootstrap";
+import React, { useEffect, useRef } from 'react';
+import { useFormik } from 'formik';
+import { Modal, Form, Button } from 'react-bootstrap';
 import {
   updateChannel,
   channelsSelector,
   setCurrentChannelId,
-} from "../../slices/channelsSlice.js";
-import { useDispatch, useSelector } from "react-redux";
-import * as Yup from "yup";
-import useSocket from "../../hooks/useSocket.jsx";
-import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from '../../slices/channelsSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from 'yup';
+import useSocket from '../../hooks/useSocket.jsx';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+const filter = require('leo-profanity');
 
-const filter = require("leo-profanity");
 filter.loadDictionary('en');
 
 const RenameChannelNotify = () => {

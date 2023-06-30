@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Button,
   Form,
@@ -7,14 +7,14 @@ import {
   Image,
   FloatingLabel,
   Row,
-} from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/Index.jsx";
-import routes from "../../routes.js";
-import { useFormik } from "formik";
-import axios from "axios";
-import * as Yup from "yup";
-import { useTranslation } from "react-i18next";
+} from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/Index.jsx';
+import routes from '../../routes.js';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);

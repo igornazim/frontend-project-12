@@ -1,7 +1,7 @@
-import { Container, Navbar, Button } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
-import useAuth from "./hooks/Index.jsx";
-import { useTranslation } from "react-i18next";
+import { Container, Navbar, Button } from 'react-bootstrap';
+import { Link, useLocation } from 'react-router-dom';
+import useAuth from './hooks/Index.jsx';
+import { useTranslation } from 'react-i18next';
 
 const AuthButton = () => {
   const auth = useAuth();

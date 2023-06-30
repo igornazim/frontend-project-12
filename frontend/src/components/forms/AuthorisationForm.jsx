@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Button,
   Form,
@@ -7,16 +7,16 @@ import {
   Image,
   FloatingLabel,
   Row,
-} from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/Index.jsx";
-import routes from "../../routes.js";
-import { useFormik } from "formik";
-import axios from "axios";
-import { useTranslation } from "react-i18next";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRollbar } from "@rollbar/react";
+} from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import useAuth from '../../hooks/Index.jsx';
+import routes from '../../routes.js';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRollbar } from '@rollbar/react';
 
 const errNetworkNotify = () => {
   toast.error('Ошибка соединения', {
@@ -127,7 +127,7 @@ const AuthorisationForm = () => {
                     variant="outline-primary"
                     type="submit"
                   >
-                    {t("authForm.logInButton")}
+                    {t('authForm.logInButton')}
                   </Button>
                 </Form>
               </Card.Body>

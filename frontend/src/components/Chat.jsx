@@ -9,36 +9,36 @@ import {
   ButtonGroup,
   Button,
   Dropdown,
-} from "react-bootstrap";
-import React, { useEffect, useState, useRef } from "react";
+} from 'react-bootstrap';
+import React, { useEffect, useState, useRef } from 'react';
 import _ from "lodash";
-import axios from "axios";
-import routes from "../routes.js";
-import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios';
+import routes from '../routes.js';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   setChannels,
   setCurrentChannelId,
   channelsSelector,
-} from "../slices/channelsSlice.js";
+} from '../slices/channelsSlice.js';
 import {
   setMessages,
   addMessage,
   messagesSelector,
-} from "../slices/messagesSlice.js";
-import { useFormik } from "formik";
-import useAuth from "../hooks/Index.jsx";
-import useSocket from "../hooks/useSocket.jsx";
-import getModal from "../getModal.js";
-import { useTranslation } from "react-i18next";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRollbar } from "@rollbar/react";
+} from '../slices/messagesSlice.js';
+import { useFormik } from 'formik';
+import useAuth from '../hooks/Index.jsx';
+import useSocket from '../hooks/useSocket.jsx';
+import getModal from '../getModal.js';
+import { useTranslation } from 'react-i18next';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRollbar } from '@rollbar/react';
 
-const filter = require("leo-profanity");
-filter.loadDictionary("en");
+const filter = require('leo-profanity');
+filter.loadDictionary('en');
 
 const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem('user'));
   if (user && user.token) {
     return { Authorization: `Bearer ${user.token}` };
   }
@@ -82,29 +82,29 @@ const Chat = () => {
     if (currentChannel) {
       return currentChannel.name;
     }
-    return "general";
+    return 'general';
   };
 
   const formik = useFormik({
     initialValues: {
-      text: "",
+      text: '',
     },
     onSubmit: (values) => {
       socket.emit(
-        "newMessage",
+        'newMessage',
         {
           body: JSON.stringify(values.text),
           channelId: currentId,
-          username: "admin",
+          username: 'admin',
         },
         (response) => {
           console.log(response.status);
         }
       );
-      socket.on("newMessage", (payload) => {
+      socket.on('newMessage', (payload) => {
         dispatch(addMessage(payload));
       });
-      values.text = "";
+      values.text = '';
     },
   });
 
@@ -117,7 +117,7 @@ const Chat = () => {
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
       } catch (error) {
-        rollbar.error("Error fetching contact", error);
+        rollbar.error('Error fetching contact', error);
       }
     };
     fetchContent();
@@ -149,20 +149,20 @@ const Chat = () => {
                 variant={currentId === channel.id ? "secondary" : null}
                 id="dropdown-split-basic"
               >
-                <span className="visually-hidden">{t("chat.hiddenText")}</span>
+                <span className="visually-hidden">{t('chat.hiddenText')}</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item
-                  onClick={() => showModal("removing", channel)}
+                  onClick={() => showModal('removing', channel)}
                   href="#/action-1"
                 >
-                  {t("chat.dropdownItemDelete")}
+                  {t('chat.dropdownItemDelete')}
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => showModal("renaiming", channel)}
+                  onClick={() => showModal('renaiming', channel)}
                   href="#/action-2"
                 >
-                  {t("chat.dropdownItemRename")}
+                  {t('chat.dropdownItemRename')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -200,7 +200,7 @@ const Chat = () => {
         <Row className="h-100 bg-white flex-md-row">
           <Col className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-              <b>{t("chat.headline")}</b>
+              <b>{t('chat.headline')}</b>
               <Button
                 onClick={() => showModal("adding")}
                 type="button"
@@ -225,7 +225,7 @@ const Chat = () => {
                   <b>{`# ${getCurrentChannel()}`}</b>
                 </p>
                 <span className="text-muted">
-                  {t("chat.counter.count", { count: messages.length })}
+                  {t('chat.counter.count', { count: messages.length })}
                 </span>
               </div>
               <div
@@ -246,7 +246,7 @@ const Chat = () => {
                       name="text"
                       required
                       aria-label="Новое сообщение"
-                      placeholder={t("chat.inputText")}
+                      placeholder={t('chat.inputText')}
                       className="border-0 p-0 ps-2 form-control"
                       value={formik.values.text}
                       onChange={formik.handleChange}
