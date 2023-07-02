@@ -114,7 +114,7 @@ const Chat = () => {
       }
     };
     fetchContent();
-  }, []);
+  }, [dispatch, rollbar, t]);
 
   const inputEl = useRef(null);
   useEffect(() => {
