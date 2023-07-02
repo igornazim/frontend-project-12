@@ -3,13 +3,16 @@ const resources = {
     translation: {
       errors: {
         nameMinlength: 'От 3 до 20 символов',
-        namaMaxlength: 'Максимум 20 символов',
+        nameMaxlength: 'Максимум 20 символов',
         passwordMinLenth: 'Не менее 6 символов',
         required: 'Обязательное поле',
         confirmPassword: 'Пароли должны совпадать',
         notOneOfUser: 'Такой пользователь уже существует',
         notOneOfChannel: 'Должно быть уникальным',
         incorrectNameOrPass: 'Неверные имя пользователя или пароль',
+        fetchingError: 'Error fetching data',
+        connectionError: 'Ошибка соединения',
+        submitError: 'Не удалось отправить форму',
       },
       header: {
         logoText: 'Hexlet chat',
@@ -30,6 +33,7 @@ const resources = {
       },
       chat: {
         headline: 'Каналы',
+        defaultChannel: 'general',
         counter: {
           count_one: '{{count}} сообщение',
           count_few: '{{count}} сообщения',
@@ -60,6 +64,12 @@ const resources = {
           submitButton: 'Отправить',
           toastText: 'Канал удалён',
         },
+      },
+      page404: {
+        headline: '404',
+        thirdLevelHeadLine: 'Страница не найдена',
+        textPartOne: 'Но вы можете перейти на ',
+        textPartTwo: 'главную страницу',
       },
     },
   },

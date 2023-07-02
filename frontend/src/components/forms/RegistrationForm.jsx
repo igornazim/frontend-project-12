@@ -25,15 +25,15 @@ const RegistrationForm = () => {
 
   const SignupSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, t('errors.nameMinlength'))
-      .max(20, t('errors.nameMaxlength'))
-      .required(t('errors.required')),
+      .min(3, 'errors.nameMinlength')
+      .max(20, 'errors.nameMaxlength')
+      .required('errors.required'),
     password: Yup.string()
-      .min(6, t('errors.passwordMinLenth'))
-      .required(t('errors.required')),
+      .min(6, 'errors.passwordMinLenth')
+      .required('errors.required'),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref('password'), null],
-      t('errors.confirmPassword'),
+      'errors.confirmPassword',
     ),
   });
 
@@ -79,7 +79,7 @@ const RegistrationForm = () => {
                 onSubmit={formik.handleSubmit}
                 className="col-12 col-md-6 mt-3 mt-mb-0"
               >
-                <h1 className="text-center mb-4" as="h1">
+                <h1 className="text-center mb-4">
                   {t('signUpForm.headline')}
                 </h1>
                 <Form.Group className="form-floating mb-3">
@@ -102,7 +102,7 @@ const RegistrationForm = () => {
                       type="invalid"
                       tooltip
                     >
-                      {formik.errors.username}
+                      {t(formik.errors.username)}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                   <Form.Text className="text-muted" />
@@ -127,7 +127,7 @@ const RegistrationForm = () => {
                       type="invalid"
                       tooltip
                     >
-                      {formik.errors.password}
+                      {t(formik.errors.password)}
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 </Form.Group>
@@ -151,7 +151,7 @@ const RegistrationForm = () => {
                       type="invalid"
                       tooltip
                     >
-                      {formik.errors.confirmPassword}
+                      {t(formik.errors.confirmPassword)}
                     </Form.Control.Feedback>
                     <Form.Control.Feedback
                       placement="right"

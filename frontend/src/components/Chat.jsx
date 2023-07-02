@@ -19,20 +19,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRollbar } from '@rollbar/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import routes from '../routes.js';
+import routes from '../routes';
 import {
   setChannels,
   setCurrentChannelId,
   channelsSelector,
-} from '../slices/channelsSlice.js';
+} from '../slices/channelsSlice';
 import {
   setMessages,
   addMessage,
   messagesSelector,
-} from '../slices/messagesSlice.js';
-import useAuth from '../hooks/Index.jsx';
-import useSocket from '../hooks/useSocket.jsx';
-import getModal from '../getModal.js';
+} from '../slices/messagesSlice';
+import useAuth from '../hooks/Index';
+import useSocket from '../hooks/useSocket';
+import getModal from '../getModal';
 
 const filter = require('leo-profanity');
 
@@ -80,7 +80,7 @@ const Chat = () => {
     if (currentChannel) {
       return currentChannel.name;
     }
-    return 'general';
+    return t('defaultChannel');
   };
 
   const formik = useFormik({
@@ -95,7 +95,6 @@ const Chat = () => {
           channelId: currentId,
           username: 'admin',
         },
-        (response) => console.log(response.status),
       );
       socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
       formik.values.text = '';
@@ -111,11 +110,11 @@ const Chat = () => {
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
       } catch (error) {
-        rollbar.error('Error fetching contact', error);
+        rollbar.error(t('fetchingError'), error);
       }
     };
     fetchContent();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const inputEl = useRef(null);
   useEffect(() => {

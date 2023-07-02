@@ -11,14 +11,8 @@ import { useTranslation } from 'react-i18next';
 import {
   removeChannel,
   setCurrentChannelId,
-} from '../../slices/channelsSlice.js';
-import useSocket from '../../hooks/useSocket.jsx';
-
-const RemoveChannelNotify = () => {
-  toast.success('Канал удалён', {
-    position: toast.POSITION.TOP_RIGHT,
-  });
-};
+} from '../../slices/channelsSlice';
+import useSocket from '../../hooks/useSocket';
 
 const Remove = (props) => {
   const dispatch = useDispatch();
@@ -26,6 +20,12 @@ const Remove = (props) => {
   const { hideModal, modalInfo } = props;
 
   const { t } = useTranslation();
+
+  const RemoveChannelNotify = () => {
+    toast.success(t('modals.remove.toastText'), {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();

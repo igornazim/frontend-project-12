@@ -10,24 +10,19 @@ import {
   updateChannel,
   channelsSelector,
   setCurrentChannelId,
-} from '../../slices/channelsSlice.js';
-import useSocket from '../../hooks/useSocket.jsx';
+} from '../../slices/channelsSlice';
+import useSocket from '../../hooks/useSocket';
 
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
-
-const RenameChannelNotify = () => {
-  toast.success('Канал переименован', {
-    position: toast.POSITION.TOP_RIGHT,
-  });
-};
 
 const Rename = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
   const { socket } = useSocket();
+
   const { hideModal, modalInfo } = props;
   const inputEl = useRef(null);
   useEffect(() => {
@@ -36,10 +31,16 @@ const Rename = (props) => {
 
   const { t } = useTranslation();
 
+  const RenameChannelNotify = () => {
+    toast.success(t('modals.rename.toastText'), {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+
   const renaimingSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, t('errors.nameMinlength'))
-      .required(t('errors.required'))
+      .min(3, 'errors.nameMinlength')
+      .required('errors.required')
       .notOneOf(channelsNames, t('errors.notOneOfChannel')),
   });
 
@@ -91,7 +92,7 @@ const Rename = (props) => {
               }
             />
             <Form.Control.Feedback type="invalid">
-              {formik.errors.channelName}
+              {t(formik.errors.channelName)}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="d-flex justify-content-end">

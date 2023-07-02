@@ -1,6 +1,6 @@
-import Add from './components/popups/Add.jsx';
-import Rename from './components/popups/Rename.jsx';
-import Remove from './components/popups/Remove.jsx';
+import Add from './components/popups/Add';
+import Rename from './components/popups/Rename';
+import Remove from './components/popups/Remove';
 
 const modals = {
   adding: Add,
@@ -8,5 +8,4 @@ const modals = {
   removing: Remove,
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default (modalName) => modals[modalName];

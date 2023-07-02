@@ -18,12 +18,6 @@ import axios from 'axios';
 import useAuth from '../../hooks/Index.jsx';
 import routes from '../../routes.js';
 
-const errNetworkNotify = () => {
-  toast.error('Ошибка соединения', {
-    position: toast.POSITION.TOP_RIGHT,
-  });
-};
-
 const AuthorisationForm = () => {
   const rollbar = useRollbar();
   const [authFailed, setAuthFailed] = useState(false);
@@ -31,6 +25,12 @@ const AuthorisationForm = () => {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
+
+  const errNetworkNotify = () => {
+    toast.error(t('connectionError'), {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -53,7 +53,7 @@ const AuthorisationForm = () => {
           setAuthFailed(true);
           return;
         }
-        rollbar.error('Error submit', err);
+        rollbar.error(t('submitError'), err);
         throw err;
       }
     },
@@ -77,7 +77,7 @@ const AuthorisationForm = () => {
                   onSubmit={formik.handleSubmit}
                   className="col-12 col-md-6 mt-3 mt-mb-0"
                 >
-                  <h1 className="text-center mb-4" as="h1">
+                  <h1 className="text-center mb-4">
                     {t('authForm.headline')}
                   </h1>
                   <Form.Group className="form-floating mb-3">

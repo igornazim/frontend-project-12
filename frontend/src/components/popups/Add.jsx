@@ -11,18 +11,12 @@ import {
   addChannel,
   channelsSelector,
   setCurrentChannelId,
-} from '../../slices/channelsSlice.js';
-import useSocket from '../../hooks/useSocket.jsx';
+} from '../../slices/channelsSlice';
+import useSocket from '../../hooks/useSocket';
 
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
-
-const AddChannelNotify = () => {
-  toast.success('Канал создан', {
-    position: toast.POSITION.TOP_RIGHT,
-  });
-};
 
 const Add = (props) => {
   const channels = useSelector(channelsSelector.selectAll);
@@ -37,11 +31,17 @@ const Add = (props) => {
 
   const { t } = useTranslation();
 
+  const AddChannelNotify = () => {
+    toast.success(t('modals.add.toastText'), {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+
   const addingSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, t('errors.nameMinlength'))
-      .required(t('errors.required'))
-      .notOneOf(channelsNames, t('errors.notOneOfChannel')),
+      .min(3, 'errors.nameMinlength')
+      .required('errors.required')
+      .notOneOf(channelsNames, 'errors.notOneOfChannel'),
   });
 
   const formik = useFormik({
@@ -93,7 +93,7 @@ const Add = (props) => {
               }
             />
             <Form.Control.Feedback type="invalid">
-              {formik.errors.channelName}
+              {t(formik.errors.channelName)}
             </Form.Control.Feedback>
           </Form.Group>
           <Form.Group className="d-flex justify-content-end">

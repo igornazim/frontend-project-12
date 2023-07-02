@@ -3,10 +3,10 @@ import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { Provider } from 'react-redux';
-import SocketContext from './contexts/socket.jsx';
+import SocketContext from './contexts/socket';
 import App from './App';
-import store from './slices/index.js';
-import resources from './locales/index.js';
+import store from './slices/index';
+import resources from './locales/index';
 
 const init = async () => {
   const rollbarConfig = {
