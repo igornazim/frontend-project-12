@@ -29,9 +29,9 @@ import { showModal } from '../../slices/modalsSlice';
 import useAuth from '../../hooks/Index';
 import useApi from '../../hooks/useSocket';
 import getModal from '../popups/getModal';
-import renderModal from '../popups/utils';
-import renderChannels from './Channels';
-import renderMessages from './Messages';
+import Modal from '../popups/utils';
+import Channels from './Channels';
+import Messages from './Messages';
 
 const filter = require('leo-profanity');
 
@@ -100,7 +100,7 @@ const Chat = () => {
       }
     };
     fetchContent();
-  }, [dispatch, rollbar, t]);
+  }, [dispatch, rollbar, t, getUser]);
 
   const inputEl = useRef(null);
   useEffect(() => {
@@ -128,7 +128,7 @@ const Chat = () => {
               id="channels-box"
               className="flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
             >
-              {renderChannels()}
+              <Channels />
             </Nav>
           </Col>
           <Col className="p-0 h-100">
@@ -145,7 +145,7 @@ const Chat = () => {
                 id="messages-box"
                 className="chat-messages overflow-auto px-5 "
               >
-                {renderMessages()}
+                <Messages />
               </div>
               <div className="mt-auto px-5 py-3">
                 <Form
@@ -179,7 +179,7 @@ const Chat = () => {
             </div>
           </Col>
         </Row>
-        {renderModal(getModal)}
+        <Modal getModal={getModal} />
       </Container>
       <ToastContainer />
     </>

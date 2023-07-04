@@ -19,7 +19,7 @@ const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
 
-const renderChannels = () => {
+const Channels = () => {
   const dispatch = useDispatch();
   const channels = useSelector(channelsSelector.selectAll);
   const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
@@ -81,4 +81,4 @@ const renderChannels = () => {
   });
 };
 
-export default renderChannels;
+export default Channels;

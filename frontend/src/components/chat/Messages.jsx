@@ -7,7 +7,7 @@ const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
 
-const renderMessages = () => {
+const Messages = () => {
   const currentId = useSelector((state) => state.channelsReducer.currentChannelId);
   const messages = useSelector(messagesSelector.selectAll)
     .filter(({ channelId }) => channelId === currentId);
@@ -24,4 +24,4 @@ const renderMessages = () => {
   ));
 };
 
-export default renderMessages;
+export default Messages;

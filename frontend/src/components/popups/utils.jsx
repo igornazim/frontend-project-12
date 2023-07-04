@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 
-const renderModal = (getModal) => {
+const Modal = (props) => {
+  const { getModal } = props;
   const modalType = useSelector((state) => state.modalsReducer.type);
   if (!modalType) {
     return null;
@@ -11,4 +12,4 @@ const renderModal = (getModal) => {
   );
 };
 
-export default renderModal;
+export default Modal;
