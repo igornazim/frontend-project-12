@@ -11,19 +11,20 @@ import {
   channelsSelector,
   setCurrentChannelId,
 } from '../../slices/channelsSlice';
-import useSocket from '../../hooks/useSocket';
+import { hideModal } from '../../slices/modalsSlice';
+import useApi from '../../hooks/useSocket';
 
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
 
-const Rename = (props) => {
+const Rename = () => {
   const channels = useSelector(channelsSelector.selectAll);
+  const channel = useSelector((state) => state.modalsReducer.channel);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socket } = useSocket();
+  const { socket } = useApi();
 
-  const { hideModal, modalInfo } = props;
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.select();
@@ -53,16 +54,16 @@ const Rename = (props) => {
     onSubmit: () => {
       if (formik.values.channelName !== '') {
         const updatedChannel = {
-          ...modalInfo.channel,
+          id: channel.id,
           name: formik.values.channelName,
         };
         socket.emit('renameChannel', updatedChannel);
         socket.on('renameChannel', (payload) => {
-          dispatch(updateChannel({ id: modalInfo.channel.id, changes: payload }));
+          dispatch(updateChannel({ id: channel.id, changes: payload }));
           dispatch(setCurrentChannelId(payload.id));
         });
         formik.values.channelName = '';
-        hideModal();
+        dispatch(hideModal());
         RenameChannelNotify();
       }
     },
@@ -70,7 +71,7 @@ const Rename = (props) => {
 
   return (
     <Modal centered show>
-      <Modal.Header closeButton onClick={() => hideModal()}>
+      <Modal.Header closeButton onClick={() => dispatch(hideModal())}>
         <Modal.Title>{t('modals.rename.headline')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -98,7 +99,7 @@ const Rename = (props) => {
           <Form.Group className="d-flex justify-content-end">
             <Button
               variant="secondary"
-              onClick={() => hideModal()}
+              onClick={() => dispatch(hideModal())}
               className="me-2"
             >
               {t('modals.rename.cancelButton')}

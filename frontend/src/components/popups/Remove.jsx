@@ -6,18 +6,20 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import {
   removeChannel,
   setCurrentChannelId,
 } from '../../slices/channelsSlice';
-import useSocket from '../../hooks/useSocket';
+import { hideModal } from '../../slices/modalsSlice';
+import useApi from '../../hooks/useSocket';
 
-const Remove = (props) => {
+const Remove = () => {
+  const channel = useSelector((state) => state.modalsReducer.channel);
+
   const dispatch = useDispatch();
-  const { socket } = useSocket();
-  const { hideModal, modalInfo } = props;
+  const { socket } = useApi();
 
   const { t } = useTranslation();
 
@@ -30,17 +32,17 @@ const Remove = (props) => {
   const onSubmit = (e) => {
     e.preventDefault();
     dispatch(setCurrentChannelId(1));
-    socket.emit('removeChannel', { id: modalInfo.channel.id });
+    socket.emit('removeChannel', { id: channel.id });
     socket.on('removeChannel', (payload) => {
       dispatch(removeChannel(payload.id));
     });
-    hideModal();
+    dispatch(hideModal());
     RemoveChannelNotify();
   };
 
   return (
     <Modal centered show>
-      <Modal.Header closeButton onClick={() => hideModal()}>
+      <Modal.Header closeButton onClick={() => dispatch(hideModal())}>
         <Modal.Title>{t('modals.remove.headline')}</Modal.Title>
       </Modal.Header>
 
@@ -53,7 +55,7 @@ const Remove = (props) => {
             </Form.Label>
             <Button
               variant="secondary"
-              onClick={() => hideModal()}
+              onClick={() => dispatch(hideModal())}
               className="me-2"
             >
               {t('modals.remove.cancelButton')}

@@ -12,18 +12,18 @@ import {
   channelsSelector,
   setCurrentChannelId,
 } from '../../slices/channelsSlice';
-import useSocket from '../../hooks/useSocket';
+import { hideModal } from '../../slices/modalsSlice';
+import useApi from '../../hooks/useSocket';
 
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
 
-const Add = (props) => {
+const Add = () => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socket } = useSocket();
-  const { hideModal } = props;
+  const { socket } = useApi();
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.focus();
@@ -63,7 +63,7 @@ const Add = (props) => {
           dispatch(setCurrentChannelId(payload.id));
         });
         formik.values.channelName = '';
-        hideModal();
+        dispatch(hideModal());
         AddChannelNotify();
       }
     },
@@ -71,7 +71,7 @@ const Add = (props) => {
 
   return (
     <Modal centered show>
-      <Modal.Header closeButton onClick={() => hideModal()}>
+      <Modal.Header closeButton onClick={() => dispatch(hideModal())}>
         <Modal.Title>{t('modals.add.headline')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -99,7 +99,7 @@ const Add = (props) => {
           <Form.Group className="d-flex justify-content-end">
             <Button
               variant="secondary"
-              onClick={() => hideModal()}
+              onClick={() => dispatch(hideModal())}
               className="me-2"
             >
               {t('modals.add.cancelButton')}

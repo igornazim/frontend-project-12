@@ -1,7 +1,10 @@
 import { Navigate, useLocation } from 'react-router-dom';
+import useAuth from '../hooks/Index';
 
 const AuthRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const { getUser } = useAuth();
+
+  const user = getUser('user');
   const location = useLocation();
   if (user && user.token) {
     return children;

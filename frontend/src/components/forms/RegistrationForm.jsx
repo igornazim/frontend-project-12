@@ -48,7 +48,7 @@ const RegistrationForm = () => {
       setRegFailed(false);
       try {
         const res = await axios.post(routes.signUpPath(), values);
-        localStorage.setItem('user', JSON.stringify(res.data));
+        auth.setUser('user', res.data);
         auth.logIn(res.data);
         navigate('/');
       } catch (err) {

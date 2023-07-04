@@ -5,13 +5,9 @@ import {
   Image,
   Form,
   Nav,
-  ToggleButton,
-  ButtonGroup,
   Button,
-  Dropdown,
 } from 'react-bootstrap';
-import React, { useEffect, useState, useRef } from 'react';
-import _ from 'lodash';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { ToastContainer } from 'react-toastify';
@@ -19,27 +15,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRollbar } from '@rollbar/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import routes from '../routes';
+import routes from '../../routes';
 import {
   setChannels,
-  setCurrentChannelId,
   channelsSelector,
-} from '../slices/channelsSlice';
+} from '../../slices/channelsSlice';
 import {
   setMessages,
   addMessage,
   messagesSelector,
-} from '../slices/messagesSlice';
-import useAuth from '../hooks/Index';
-import useSocket from '../hooks/useSocket';
-import getModal from '../getModal';
+} from '../../slices/messagesSlice';
+import { showModal } from '../../slices/modalsSlice';
+import useAuth from '../../hooks/Index';
+import useApi from '../../hooks/useSocket';
+import getModal from '../popups/getModal';
+import renderModal from '../popups/utils';
+import renderChannels from './Channels';
+import renderMessages from './Messages';
 
 const filter = require('leo-profanity');
 
 filter.loadDictionary('en');
 
-const getAuthHeader = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+const getAuthHeader = (dataName, getData) => {
+  const user = getData(dataName);
   if (user && user.token) {
     return { Authorization: `Bearer ${user.token}` };
   }
@@ -47,21 +46,8 @@ const getAuthHeader = () => {
   return {};
 };
 
-const renderModal = ({ modalInfo, hideModal, setId }) => {
-  if (!modalInfo.type) {
-    return null;
-  }
-  const Component = getModal(modalInfo.type);
-  return (
-    <Component modalInfo={modalInfo} hideModal={hideModal} setId={setId} />
-  );
-};
-
 const Chat = () => {
   const rollbar = useRollbar();
-  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
-  const showModal = (type, channel = null) => setModalInfo({ type, channel });
-  const hideModal = () => setModalInfo({ type: null, channel: null });
 
   const dispatch = useDispatch();
 
@@ -70,8 +56,8 @@ const Chat = () => {
   const messages = useSelector(messagesSelector.selectAll)
     .filter(({ channelId }) => channelId === currentId);
 
-  const { currentUser } = useAuth();
-  const { socket } = useSocket();
+  const { getUser } = useAuth();
+  const { socket } = useApi();
 
   const { t } = useTranslation();
 
@@ -105,7 +91,7 @@ const Chat = () => {
     const fetchContent = async () => {
       try {
         const { data } = await axios.get(routes.usersPath(), {
-          headers: getAuthHeader(),
+          headers: getAuthHeader('user', getUser),
         });
         dispatch(setChannels(data.channels));
         dispatch(setMessages(data.messages));
@@ -121,73 +107,6 @@ const Chat = () => {
     inputEl.current.focus();
   }, []);
 
-  const renderChannels = () => {
-    if (channels.length === 0) {
-      return null;
-    }
-    return channels.map((channel) => {
-      if (channel.removable) {
-        return (
-          <Nav.Item key={_.uniqueId()} className="w-100">
-            <Dropdown className="w-100" as={ButtonGroup}>
-              <Button
-                variant={currentId === channel.id ? 'secondary' : null}
-                onClick={() => dispatch(setCurrentChannelId(channel.id))}
-                className="w-100 rounded-0 text-start text-truncate"
-              >
-                {`# ${filter.clean(channel.name)}`}
-              </Button>
-              <Dropdown.Toggle
-                split
-                variant={currentId === channel.id ? 'secondary' : null}
-                id="dropdown-split-basic"
-              >
-                <span className="visually-hidden">{t('chat.hiddenText')}</span>
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => showModal('removing', channel)}
-                  href="#/action-1"
-                >
-                  {t('chat.dropdownItemDelete')}
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => showModal('renaiming', channel)}
-                  href="#/action-2"
-                >
-                  {t('chat.dropdownItemRename')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav.Item>
-        );
-      }
-      return (
-        <Nav.Item key={_.uniqueId()} className="w-100">
-          <ToggleButton
-            variant={currentId === channel.id ? 'secondary' : null}
-            type="button"
-            className="w-100 rounded-0 text-start"
-            onClick={() => dispatch(setCurrentChannelId(channel.id))}
-          >
-            <span className="me-1">#</span>
-            {channel.name}
-          </ToggleButton>
-        </Nav.Item>
-      );
-    });
-  };
-
-  const renderMessages = () => messages.map(({ body, id }) => (
-    <div key={id} className="text-break mb-2">
-      <b>
-        {currentUser.username}
-        :
-      </b>
-      {` ${filter.clean(JSON.parse(body))}`}
-    </div>
-  ));
-
   return (
     <>
       <Container className="h-100 my-4 overflow-hidden rounded shadow">
@@ -196,7 +115,7 @@ const Chat = () => {
             <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
               <b>{t('chat.headline')}</b>
               <Button
-                onClick={() => showModal('adding')}
+                onClick={() => dispatch(showModal({ type: 'adding' }))}
                 type="button"
                 variant="light"
                 className="p-0 text-primary btn btn-group-vertical"
@@ -260,7 +179,7 @@ const Chat = () => {
             </div>
           </Col>
         </Row>
-        {renderModal({ modalInfo, hideModal })}
+        {renderModal(getModal)}
       </Container>
       <ToastContainer />
     </>

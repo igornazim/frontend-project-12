@@ -3,14 +3,14 @@ import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { Provider } from 'react-redux';
-import SocketContext from './contexts/socket';
+import ApiContext from './contexts/socket';
 import App from './App';
 import store from './slices/index';
 import resources from './locales/index';
 
 const init = async () => {
   const rollbarConfig = {
-    accessToken: '382c69313d6142bf91379e384ff9b6aa',
+    accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
     environment: 'production',
   };
 
@@ -30,9 +30,9 @@ const init = async () => {
       <ErrorBoundary>
         <I18nextProvider i18n={i18nextInstance}>
           <Provider store={store}>
-            <SocketContext.Provider value={{ socket }}>
+            <ApiContext.Provider value={{ socket }}>
               <App />
-            </SocketContext.Provider>
+            </ApiContext.Provider>
           </Provider>
         </I18nextProvider>
       </ErrorBoundary>
