@@ -4,14 +4,16 @@ import { useTranslation } from 'react-i18next';
 import useAuth from './hooks/Index';
 
 const AuthButton = () => {
-  const auth = useAuth();
+  const { getUser, logOut } = useAuth();
+  const user = getUser('user');
+
   const location = useLocation();
 
   const { t } = useTranslation();
 
-  return auth.currentUser ? (
+  return user ? (
     <Button
-      onClick={auth.logOut}
+      onClick={() => logOut('user')}
       as={Link}
       to="/login"
       state={{ from: location }}

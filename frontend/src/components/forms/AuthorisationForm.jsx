@@ -41,8 +41,7 @@ const AuthorisationForm = () => {
       setAuthFailed(false);
       try {
         const res = await axios.post(routes.loginPath(), values);
-        auth.setUser('user', res.data);
-        auth.logIn(res.data);
+        auth.logIn('user', res.data);
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);

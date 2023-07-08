@@ -6,11 +6,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  updateChannel,
-  channelsSelector,
-  setCurrentChannelId,
-} from '../../slices/channelsSlice';
+import { channelsSelector } from '../../slices/channelsSlice';
 import { hideModal } from '../../slices/modalsSlice';
 import useApi from '../../hooks/useSocket';
 
@@ -23,7 +19,7 @@ const Rename = () => {
   const channel = useSelector((state) => state.modalsReducer.channel);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socket } = useApi();
+  const { socketEmetWrapper } = useApi();
 
   const inputEl = useRef(null);
   useEffect(() => {
@@ -57,11 +53,7 @@ const Rename = () => {
           id: channel.id,
           name: formik.values.channelName,
         };
-        socket.emit('renameChannel', updatedChannel);
-        socket.on('renameChannel', (payload) => {
-          dispatch(updateChannel({ id: channel.id, changes: payload }));
-          dispatch(setCurrentChannelId(payload.id));
-        });
+        socketEmetWrapper('renameChannel', updatedChannel);
         formik.values.channelName = '';
         dispatch(hideModal());
         RenameChannelNotify();

@@ -12,11 +12,14 @@ const Messages = () => {
   const messages = useSelector(messagesSelector.selectAll)
     .filter(({ channelId }) => channelId === currentId);
 
-  const { currentUser } = useAuth();
-  return messages.map(({ body, id }) => (
+  const { getUser } = useAuth();
+  const user = getUser('user');
+  if (!user) {
+    return null;
+  } return messages.map(({ body, id }) => (
     <div key={id} className="text-break mb-2">
       <b>
-        {currentUser.username}
+        {user.username}
         :
       </b>
       {` ${filter.clean(JSON.parse(body))}`}

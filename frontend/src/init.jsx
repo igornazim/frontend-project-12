@@ -7,6 +7,10 @@ import ApiContext from './contexts/socket';
 import App from './App';
 import store from './slices/index';
 import resources from './locales/index';
+import { addMessage } from './slices/messagesSlice';
+import {
+  addChannel, updateChannel, removeChannel, setCurrentChannelId,
+} from './slices/channelsSlice';
 
 const init = async () => {
   const rollbarConfig = {
@@ -15,6 +19,20 @@ const init = async () => {
   };
 
   const socket = io();
+  socket.on('newMessage', (payload) => store.dispatch(addMessage(payload)));
+  socket.on('newChannel', (payload) => {
+    store.dispatch(addChannel(payload));
+    store.dispatch(setCurrentChannelId(payload.id));
+  });
+  socket.on('renameChannel', (payload) => {
+    store.dispatch(updateChannel({ id: payload.id, changes: payload }));
+    store.dispatch(setCurrentChannelId(payload.id));
+  });
+  socket.on('removeChannel', (payload) => {
+    store.dispatch(removeChannel(payload.id));
+  });
+
+  const socketEmetWrapper = (method, data) => socket.emit(method, data);
 
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.use(initReactI18next).init({
@@ -30,7 +48,7 @@ const init = async () => {
       <ErrorBoundary>
         <I18nextProvider i18n={i18nextInstance}>
           <Provider store={store}>
-            <ApiContext.Provider value={{ socket }}>
+            <ApiContext.Provider value={{ socketEmetWrapper }}>
               <App />
             </ApiContext.Provider>
           </Provider>

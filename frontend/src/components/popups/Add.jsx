@@ -7,11 +7,7 @@ import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addChannel,
-  channelsSelector,
-  setCurrentChannelId,
-} from '../../slices/channelsSlice';
+import { channelsSelector } from '../../slices/channelsSlice';
 import { hideModal } from '../../slices/modalsSlice';
 import useApi from '../../hooks/useSocket';
 
@@ -23,7 +19,7 @@ const Add = () => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socket } = useApi();
+  const { socketEmetWrapper } = useApi();
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.focus();
@@ -57,11 +53,7 @@ const Add = () => {
           name: formik.values.channelName,
           removable: true,
         };
-        socket.emit('newChannel', newChannel);
-        socket.on('newChannel', (payload) => {
-          dispatch(addChannel(payload));
-          dispatch(setCurrentChannelId(payload.id));
-        });
+        socketEmetWrapper('newChannel', newChannel);
         formik.values.channelName = '';
         dispatch(hideModal());
         AddChannelNotify();

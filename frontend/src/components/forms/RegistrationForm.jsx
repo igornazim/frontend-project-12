@@ -48,8 +48,7 @@ const RegistrationForm = () => {
       setRegFailed(false);
       try {
         const res = await axios.post(routes.signUpPath(), values);
-        auth.setUser('user', res.data);
-        auth.logIn(res.data);
+        auth.logIn('user', res.data);
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);

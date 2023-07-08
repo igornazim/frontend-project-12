@@ -22,7 +22,6 @@ import {
 } from '../../slices/channelsSlice';
 import {
   setMessages,
-  addMessage,
   messagesSelector,
 } from '../../slices/messagesSlice';
 import { showModal } from '../../slices/modalsSlice';
@@ -57,7 +56,7 @@ const Chat = () => {
     .filter(({ channelId }) => channelId === currentId);
 
   const { getUser } = useAuth();
-  const { socket } = useApi();
+  const { socketEmetWrapper } = useApi();
 
   const { t } = useTranslation();
 
@@ -74,15 +73,12 @@ const Chat = () => {
       text: '',
     },
     onSubmit: () => {
-      socket.emit(
-        'newMessage',
-        {
-          body: JSON.stringify(formik.values.text),
-          channelId: currentId,
-          username: 'admin',
-        },
-      );
-      socket.on('newMessage', (payload) => dispatch(addMessage(payload)));
+      const newMessage = {
+        body: JSON.stringify(formik.values.text),
+        channelId: currentId,
+        username: 'admin',
+      };
+      socketEmetWrapper('newMessage', newMessage);
       formik.values.text = '';
     },
   });
