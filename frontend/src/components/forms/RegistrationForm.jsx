@@ -13,8 +13,8 @@ import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import useAuth from '../../hooks/Index.jsx';
-import routes from '../../routes.js';
+import useAuth from '../../hooks/useAuth';
+import routes from '../../routes';
 
 const RegistrationForm = () => {
   const [regFailed, setRegFailed] = useState(true);

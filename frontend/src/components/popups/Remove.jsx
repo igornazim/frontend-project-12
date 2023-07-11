@@ -8,9 +8,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { setCurrentChannelId } from '../../slices/channelsSlice';
 import { hideModal } from '../../slices/modalsSlice';
-import useApi from '../../hooks/useSocket';
+import useApi from '../../hooks/useApi';
 
 const Remove = () => {
   const channel = useSelector((state) => state.modalsReducer.channel);
@@ -28,7 +27,6 @@ const Remove = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(setCurrentChannelId(1));
     socketEmetWrapper('removeChannel', { id: channel.id });
     dispatch(hideModal());
     RemoveChannelNotify();

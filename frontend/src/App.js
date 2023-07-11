@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import RegistrationForm from './components/forms/RegistrationForm.jsx';
-import AuthorisationForm from './components/forms/AuthorisationForm.jsx';
-import Chat from './components/chat/Chat.jsx';
-import PrivateRoute from './components/PrivateRoute.jsx';
-import Navigation from './Navigation.jsx';
-import Page404 from './Page404.jsx';
-import AuthContext from './contexts/Index.jsx';
+import RegistrationForm from './components/forms/RegistrationForm';
+import AuthorisationForm from './components/forms/AuthorisationForm';
+import Chat from './components/chat/Chat';
+import PrivateRoute from './components/PrivateRoute';
+import Navigation from './Navigation';
+import Page404 from './Page404';
+import AuthContext from './contexts/useAuth';
 
 const AuthProvider = ({ children }) => {
   const logIn = (dataName, resData) => localStorage.setItem(dataName, JSON.stringify(resData));

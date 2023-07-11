@@ -25,8 +25,8 @@ import {
   messagesSelector,
 } from '../../slices/messagesSlice';
 import { showModal } from '../../slices/modalsSlice';
-import useAuth from '../../hooks/Index';
-import useApi from '../../hooks/useSocket';
+import useAuth from '../../hooks/useAuth';
+import useApi from '../../hooks/useApi';
 import getModal from '../popups/getModal';
 import Modal from '../popups/utils';
 import Channels from './Channels';

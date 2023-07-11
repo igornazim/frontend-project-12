@@ -3,7 +3,7 @@ import i18next from 'i18next';
 import { initReactI18next, I18nextProvider } from 'react-i18next';
 import { io } from 'socket.io-client';
 import { Provider } from 'react-redux';
-import ApiContext from './contexts/socket';
+import ApiContext from './contexts/useApi';
 import App from './App';
 import store from './slices/index';
 import resources from './locales/index';
@@ -33,6 +33,14 @@ const init = async () => {
   });
 
   const socketEmetWrapper = (method, data) => socket.emit(method, data);
+  /* const socketMap = {
+    newMessage: async (data) => {
+      await socket.emit('newMessage', data);
+    },
+    newChannel: (data) => socket.emit('newChannel', data),
+    renameChannel: (data) => socket.emit('renameChannel', data),
+    removeChannel: (data) => socket.emit('removeChannel', data),
+  }; */
 
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.use(initReactI18next).init({

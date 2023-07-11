@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { channelsSelector } from '../../slices/channelsSlice';
 import { hideModal } from '../../slices/modalsSlice';
-import useApi from '../../hooks/useSocket';
+import useApi from '../../hooks/useApi';
 
 const filter = require('leo-profanity');
 

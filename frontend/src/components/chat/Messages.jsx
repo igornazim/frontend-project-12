@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { messagesSelector } from '../../slices/messagesSlice';
-import useAuth from '../../hooks/Index';
+import useAuth from '../../hooks/useAuth';
 
 const filter = require('leo-profanity');
 
