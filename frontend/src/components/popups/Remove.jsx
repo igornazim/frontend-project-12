@@ -15,7 +15,7 @@ const Remove = () => {
   const channel = useSelector((state) => state.modalsReducer.channel);
 
   const dispatch = useDispatch();
-  const { socketEmetWrapper } = useApi();
+  const { mapping } = useApi();
 
   const { t } = useTranslation();
 
@@ -25,11 +25,15 @@ const Remove = () => {
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    socketEmetWrapper('removeChannel', { id: channel.id });
-    dispatch(hideModal());
-    RemoveChannelNotify();
+    try {
+      await mapping.removeChannel({ id: channel.id });
+      dispatch(hideModal());
+      RemoveChannelNotify();
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   return (

@@ -19,7 +19,7 @@ const Add = () => {
   const channels = useSelector(channelsSelector.selectAll);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socketEmetWrapper } = useApi();
+  const { mapping } = useApi();
   const inputEl = useRef(null);
   useEffect(() => {
     inputEl.current.focus();
@@ -46,17 +46,21 @@ const Add = () => {
       channel: {},
     },
     validationSchema: addingSchema,
-    onSubmit: () => {
+    onSubmit: async () => {
       if (formik.values.channelName !== '') {
         const newChannel = {
           id: _.uniqueId(),
           name: formik.values.channelName,
           removable: true,
         };
-        socketEmetWrapper('newChannel', newChannel);
-        formik.values.channelName = '';
-        dispatch(hideModal());
-        AddChannelNotify();
+        try {
+          await mapping.newChannel(newChannel);
+          formik.values.channelName = '';
+          dispatch(hideModal());
+          AddChannelNotify();
+        } catch (e) {
+          throw new Error(e);
+        }
       }
     },
   });

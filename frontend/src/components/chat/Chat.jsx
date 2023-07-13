@@ -56,7 +56,7 @@ const Chat = () => {
     .filter(({ channelId }) => channelId === currentId);
 
   const { getUser } = useAuth();
-  const { socketEmetWrapper } = useApi();
+  const { mapping } = useApi();
 
   const { t } = useTranslation();
 
@@ -72,14 +72,18 @@ const Chat = () => {
     initialValues: {
       text: '',
     },
-    onSubmit: () => {
+    onSubmit: async () => {
       const newMessage = {
         body: JSON.stringify(formik.values.text),
         channelId: currentId,
         username: 'admin',
       };
-      socketEmetWrapper('newMessage', newMessage);
-      formik.values.text = '';
+      try {
+        await mapping.newMessage(newMessage);
+        formik.resetForm();
+      } catch (e) {
+        throw new Error(e);
+      }
     },
   });
 

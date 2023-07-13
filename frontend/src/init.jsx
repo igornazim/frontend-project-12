@@ -32,15 +32,24 @@ const init = async () => {
     store.dispatch(removeChannel(payload.id));
   });
 
-  const socketEmetWrapper = (method, data) => socket.emit(method, data);
-  /* const socketMap = {
-    newMessage: async (data) => {
-      await socket.emit('newMessage', data);
-    },
-    newChannel: (data) => socket.emit('newChannel', data),
-    renameChannel: (data) => socket.emit('renameChannel', data),
-    removeChannel: (data) => socket.emit('removeChannel', data),
-  }; */
+  const promisify = (f) => (...args) => new Promise((resolve, reject) => {
+    const callback = (response) => {
+      if (response.status === 'ok') {
+        resolve(response.status);
+      } else {
+        reject(response);
+      }
+    };
+
+    f(...args, callback);
+  });
+
+  const mapping = {
+    newMessage: promisify((data, cb) => socket.emit('newMessage', data, cb)),
+    newChannel: promisify((data, cb) => socket.emit('newChannel', data, cb)),
+    renameChannel: promisify((data, cb) => socket.emit('renameChannel', data, cb)),
+    removeChannel: promisify((data, cb) => socket.emit('removeChannel', data, cb)),
+  };
 
   const i18nextInstance = i18next.createInstance();
   await i18nextInstance.use(initReactI18next).init({
@@ -56,7 +65,7 @@ const init = async () => {
       <ErrorBoundary>
         <I18nextProvider i18n={i18nextInstance}>
           <Provider store={store}>
-            <ApiContext.Provider value={{ socketEmetWrapper }}>
+            <ApiContext.Provider value={{ mapping }}>
               <App />
             </ApiContext.Provider>
           </Provider>

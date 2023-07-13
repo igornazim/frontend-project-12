@@ -19,7 +19,7 @@ const Rename = () => {
   const channel = useSelector((state) => state.modalsReducer.channel);
   const channelsNames = channels.map(({ name }) => name);
   const dispatch = useDispatch();
-  const { socketEmetWrapper } = useApi();
+  const { mapping } = useApi();
 
   const inputEl = useRef(null);
   useEffect(() => {
@@ -47,16 +47,20 @@ const Rename = () => {
       channel: {},
     },
     validationSchema: renaimingSchema,
-    onSubmit: () => {
+    onSubmit: async () => {
       if (formik.values.channelName !== '') {
         const updatedChannel = {
           id: channel.id,
           name: formik.values.channelName,
         };
-        socketEmetWrapper('renameChannel', updatedChannel);
-        formik.values.channelName = '';
-        dispatch(hideModal());
-        RenameChannelNotify();
+        try {
+          await mapping.renameChannel(updatedChannel);
+          formik.resetForm();
+          dispatch(hideModal());
+          RenameChannelNotify();
+        } catch (e) {
+          throw new Error(e);
+        }
       }
     },
   });
